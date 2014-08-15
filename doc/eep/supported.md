@@ -31,6 +31,10 @@
 * POWER_W (read)
 * SWITCH (read / write)
 
+This was tested with ["Funktionsstecker FS1" of "Telefunken Smart Building"](http://www.telefunken-sb.de/produkte/aufputz/funktionsstecker.html).
+
+To communicate with that smart plug the local EnOcean device must be teached-in to the smart plug. You have to clear the smart plug known communication partner and teach-in the openHAB system. If the plug does not known a communication partner, the device sends a UTE request, that will be responded by the openHAB binding automatically, if the item is created for. The local ID of the item is used. So you MUST use only one local ID per remote ID for that device type. The binding is using addressed telegrams for that device, so you could use the same local ID for multiple remote IDs.
+
 ## F6-02-01
 
 ### Parameter
