@@ -165,13 +165,24 @@ public class DeviceContainer implements DeviceParameterUpdatedListener {
         StandardConverter converter;
 
         try {
-            Class<? extends StandardConverter> converterClass;
-            converterClass = ConverterFactory.getConverterClass(config.getParameter(), config.getItemType(), config.getAcceptedDataTypes(), config.getAcceptedCommandTypes(), config.getConvParam());
+            // Find a converter class for the item.
+            final Class<? extends StandardConverter> converterClass;
+            converterClass = ConverterFactory.getConverterClass(config.getParameter(), config.getItemType(), config.getAcceptedDataTypes(),
+                                                                config.getAcceptedCommandTypes(), config.getConvParam());
+
+            // Proceed only is a converter class is found.
+            if (converterClass == null) {
+                LOGGER.warn("No converter class found! item type: {}, parameter: {}, device class: {}", config.getItemType(), config.getParameter(),
+                            device.getClass());
+                return false;
+            }
+
+            // Create a converter instance of the converter class.
             converter = ConverterFactory.createFromClass(converterClass);
 
             // Proceed only if a converter is available.
             if (converter == null) {
-                LOGGER.warn("No converter found! item type: {}, parameter: {}, device class: {}", config.getItemType(), config.getParameter(), device.getClass());
+                LOGGER.warn("Cannot create converter from class: {}", converterClass);
                 return false;
             }
         } catch (IllegalArgumentException ex) {
@@ -289,6 +300,7 @@ public class DeviceContainer implements DeviceParameterUpdatedListener {
             if (itemInfo.getParameter().equals(event.getParameter())) {
                 switch (event.getInitiation()) {
                     case RADIO_PACKET:
+                    case INTERNAL_LOGIC:
                         final Object parameterValue = event.getNewValue();
                         if (parameterValue != null) {
                             publishParameter(itemName, itemInfo, parameterValue);
@@ -297,6 +309,10 @@ public class DeviceContainer implements DeviceParameterUpdatedListener {
 
                     case SET_PARAMETER:
                         LOGGER.debug("Parameter update notifications caused by 'set parameter' will be ignored (ATM).");
+                        break;
+
+                    default:
+                        LOGGER.warn("Unhandled case: {}", event.getInitiation());
                         break;
                 }
 
