@@ -22,6 +22,7 @@ import org.openhab.binding.aleoncean.internal.converter.paramcitemc.RockerSwitch
 import org.openhab.binding.aleoncean.internal.converter.paramctypec.BooleanOnOffType;
 import org.openhab.binding.aleoncean.internal.converter.paramctypec.BooleanUpDownType;
 import org.openhab.binding.aleoncean.internal.converter.paramctypec.DoubleDecimalType;
+import org.openhab.binding.aleoncean.internal.converter.paramctypec.IntegerDecimalType;
 import org.openhab.binding.aleoncean.internal.converter.paramctypec.LongDecimalType;
 import org.openhab.binding.aleoncean.internal.converter.paramctypec.RockerSwitchActionDecimalType;
 import org.openhab.binding.aleoncean.internal.converter.paramctypec.RockerSwitchActionOnOffTypeDownPressedReleased;
@@ -82,6 +83,8 @@ public class ConverterFactory {
         list.add(BooleanUpDownType.class);
 
         list.add(DoubleDecimalType.class);
+
+        list.add(IntegerDecimalType.class);
 
         list.add(LongDecimalType.class);
 
