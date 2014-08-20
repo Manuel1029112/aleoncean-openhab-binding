@@ -34,13 +34,13 @@ Maps a boolean value to a up down type and vice versa.
 
 Maps a double value to a decimal type and vice versa.
 
-## Long - DecimalType
-
-Maps a long value to a decimal type and vice versa.
-
 ## Integer - DecimalType
 
 Maps a integer value to a decimal type and vice versa.
+
+## Long - DecimalType
+
+Maps a long value to a decimal type and vice versa.
 
 ## RockerSwitchAction - DecimalType
 
