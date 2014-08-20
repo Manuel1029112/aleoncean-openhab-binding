@@ -38,6 +38,10 @@ Maps a double value to a decimal type and vice versa.
 
 Maps a long value to a decimal type and vice versa.
 
+## Integer - DecimalType
+
+Maps a integer value to a decimal type and vice versa.
+
 ## RockerSwitchAction - DecimalType
 
 Maps a rocker switch action to a decimal type and vice versa.
