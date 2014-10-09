@@ -36,6 +36,13 @@
 
 __Pre-requirement__: [teach-in](#remote device, send data)
 
+## A5-38-08 - CMD 0x02
+
+### Parameter
+
+* POSITION_PERCENT (rw): The dimming value
+* SWITCH (rw): On / off
+
 ## D2-01-08
 
 ### Parameter
