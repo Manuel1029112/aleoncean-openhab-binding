@@ -254,7 +254,7 @@ public class Worker implements Runnable {
             if (responseGeneric instanceof CoRdVersionResponseOk) {
                 final CoRdVersionResponseOk response = (CoRdVersionResponseOk) responseGeneric;
                 chipId.fill(response.getChipId());
-                LOGGER.debug("Chip ID: {}", response.getChipId());
+                LOGGER.info("Chip ID: {}", response.getChipId());
             }
         } catch (UnknownResponseException ex) {
             LOGGER.warn("Unknown response recived.", ex);
@@ -274,7 +274,7 @@ public class Worker implements Runnable {
             if (responseGeneric instanceof CoRdIdBaseResponseOk) {
                 final CoRdIdBaseResponseOk response = (CoRdIdBaseResponseOk) responseGeneric;
                 baseId.fill(response.getBaseId());
-                LOGGER.debug("Base ID: {}, remaining write cycles: {}", response.getBaseId(),
+                LOGGER.info("Base ID: {}, remaining write cycles: {}", response.getBaseId(),
                              response.getRemainingWriteCycles());
             }
         } catch (UnknownResponseException ex) {
