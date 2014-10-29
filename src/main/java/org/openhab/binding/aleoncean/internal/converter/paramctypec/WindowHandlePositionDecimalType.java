@@ -60,7 +60,9 @@ public class WindowHandlePositionDecimalType extends ParameterClassTypeClassConv
     }
 
     @Override
-    public void commandFromOpenHAB(EventPublisher eventPublisher, String itemName, ItemInfo itemInfo, Command command) {
+    public void commandFromOpenHAB(final EventPublisher eventPublisher,
+                                   final String itemName, final ItemInfo itemInfo,
+                                   final Command command) {
         assert COMMAND_TYPE_CLASS.isAssignableFrom(command.getClass());
         try {
             setByParameter(itemInfo.getDevice(), itemInfo.getParameter(), decimalTypeToWindowHandlePosition((DecimalType) command));
@@ -69,7 +71,9 @@ public class WindowHandlePositionDecimalType extends ParameterClassTypeClassConv
     }
 
     @Override
-    public void stateFromOpenHAB(EventPublisher eventPublisher, String itemName, ItemInfo itemInfo, State state) {
+    public void stateFromOpenHAB(final EventPublisher eventPublisher,
+                                 final String itemName, final ItemInfo itemInfo,
+                                 final State state) {
         assert STATE_TYPE_CLASS.isAssignableFrom(state.getClass());
         try {
             setByParameter(itemInfo.getDevice(), itemInfo.getParameter(), decimalTypeToWindowHandlePosition((DecimalType) state));
@@ -78,7 +82,9 @@ public class WindowHandlePositionDecimalType extends ParameterClassTypeClassConv
     }
 
     @Override
-    public void parameterFromDevice(EventPublisher eventPublisher, String itemName, ItemInfo itemInfo, Object value) {
+    public void parameterFromDevice(final EventPublisher eventPublisher,
+                                    final String itemName, final ItemInfo itemInfo,
+                                    final Object value) {
         assert PARAMETER_CLASS.isAssignableFrom(value.getClass());
         try {
             postCommand(eventPublisher, itemName, windowHandlePositionToDecimalType((WindowHandlePosition) value));
