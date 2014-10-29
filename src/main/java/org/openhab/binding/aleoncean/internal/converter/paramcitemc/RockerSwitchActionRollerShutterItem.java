@@ -38,11 +38,15 @@ public class RockerSwitchActionRollerShutterItem extends ParameterClassItemClass
     private long lastDownReleasedNanoSec = 0;
 
     @Override
-    public void commandFromOpenHAB(EventPublisher eventPublisher, String itemName, ItemInfo itemInfo, Command command) {
+    public void commandFromOpenHAB(final EventPublisher eventPublisher,
+                                   final String itemName, final ItemInfo itemInfo,
+                                   final Command command) {
     }
 
     @Override
-    public void stateFromOpenHAB(EventPublisher eventPublisher, String itemName, ItemInfo itemInfo, State state) {
+    public void stateFromOpenHAB(final EventPublisher eventPublisher,
+                                 final String itemName, final ItemInfo itemInfo,
+                                 final State state) {
     }
 
     @Override

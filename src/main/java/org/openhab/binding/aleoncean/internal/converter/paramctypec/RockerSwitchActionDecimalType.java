@@ -65,7 +65,9 @@ public class RockerSwitchActionDecimalType extends ParameterClassTypeClassConver
     }
 
     @Override
-    public void commandFromOpenHAB(EventPublisher eventPublisher, String itemName, ItemInfo itemInfo, Command command) {
+    public void commandFromOpenHAB(final EventPublisher eventPublisher,
+                                   final String itemName, final ItemInfo itemInfo,
+                                   final Command command) {
         assert COMMAND_TYPE_CLASS.isAssignableFrom(command.getClass());
         try {
             final RockerSwitchAction action = decimalTypeToRockerSwitchAction((DecimalType) command);
@@ -75,7 +77,9 @@ public class RockerSwitchActionDecimalType extends ParameterClassTypeClassConver
     }
 
     @Override
-    public void stateFromOpenHAB(EventPublisher eventPublisher, String itemName, ItemInfo itemInfo, State state) {
+    public void stateFromOpenHAB(final EventPublisher eventPublisher,
+                                 final String itemName, final ItemInfo itemInfo,
+                                 final State state) {
         assert STATE_TYPE_CLASS.isAssignableFrom(state.getClass());
         try {
             final RockerSwitchAction action = decimalTypeToRockerSwitchAction((DecimalType) state);
@@ -85,7 +89,9 @@ public class RockerSwitchActionDecimalType extends ParameterClassTypeClassConver
     }
 
     @Override
-    public void parameterFromDevice(EventPublisher eventPublisher, String itemName, ItemInfo itemInfo, Object value) {
+    public void parameterFromDevice(final EventPublisher eventPublisher,
+                                    final String itemName, final ItemInfo itemInfo,
+                                    final Object value) {
         assert PARAMETER_CLASS.isAssignableFrom(value.getClass());
         try {
             final DecimalType type = rockerSwitchActionToDecimalType((RockerSwitchAction) value);
