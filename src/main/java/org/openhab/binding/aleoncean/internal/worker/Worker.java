@@ -165,7 +165,7 @@ public class Worker implements Runnable {
     private void handleWorkerItemSetBaseId(final WorkerItemSetBaseId workerItem) {
         LOGGER.debug("Receives set base id: {}", workerItem.getBaseId());
 
-        if (baseId.equals(this.baseId)) {
+        if (workerItem.getBaseId().equals(baseId)) {
             LOGGER.debug("The correct base ID is already set. Skip change request.");
             return;
         }
