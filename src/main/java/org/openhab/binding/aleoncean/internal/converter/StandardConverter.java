@@ -10,6 +10,7 @@
  */
 package org.openhab.binding.aleoncean.internal.converter;
 
+import org.openhab.binding.aleoncean.internal.ActionIn;
 import org.openhab.binding.aleoncean.internal.devices.ItemInfo;
 import org.openhab.core.events.EventPublisher;
 import org.openhab.core.types.Command;
@@ -19,19 +20,29 @@ import eu.aleon.aleoncean.device.DeviceParameter;
 import eu.aleon.aleoncean.device.IllegalDeviceParameterException;
 
 /**
- *
+ * 
  * @author Markus Rathgeb <maggu2810@gmail.com>
  */
 public abstract class StandardConverter {
 
-//    public static final DeviceParameter PARAMETER = null;
-//    public static final Class<?> PARAMETER_CLASS = null;
-//    public static final Class<? extends Item> ITEM_CLASS = null;
-//    public static final Class<? extends State> STATE_TYPE_CLASS = null;
-//    public static final Class<? extends Command> COMMAND_TYPE_CLASS = null;
-//    public static final String CONV_PARAM = null;
-//
+    // public static final DeviceParameter PARAMETER = null;
+    // public static final Class<?> PARAMETER_CLASS = null;
+    // public static final Class<? extends Item> ITEM_CLASS = null;
+    // public static final Class<? extends State> STATE_TYPE_CLASS = null;
+    // public static final Class<? extends Command> COMMAND_TYPE_CLASS = null;
+    // public static final String CONV_PARAM = null;
+    //
+
     private boolean sendToDevice = true;
+    private final ActionIn actionIn;
+
+    public StandardConverter(final ActionIn actionIn) {
+        this.actionIn = actionIn;
+    }
+
+    protected ActionIn getActionIn() {
+        return actionIn;
+    }
 
     protected void postUpdate(final EventPublisher eventPublisher, final String itemName, final State state) {
         eventPublisher.postUpdate(itemName, state);

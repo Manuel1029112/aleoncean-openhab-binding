@@ -10,17 +10,22 @@
  */
 package org.openhab.binding.aleoncean.internal.converter.paramctypec;
 
+import org.openhab.binding.aleoncean.internal.ActionIn;
 import org.openhab.binding.aleoncean.internal.converter.NoValueException;
 import org.openhab.core.library.types.OnOffType;
 import eu.aleon.aleoncean.values.RockerSwitchAction;
 
 /**
- *
+ * 
  * @author Markus Rathgeb <maggu2810@gmail.com>
  */
 public class RockerSwitchActionOnOffTypeUpPressedReleased extends RockerSwitchActionOnOffType {
 
     public static final String CONV_PARAM = "UpPressedReleased";
+
+    public RockerSwitchActionOnOffTypeUpPressedReleased(final ActionIn actionIn) {
+        super(actionIn);
+    }
 
     @Override
     protected RockerSwitchAction onOffTypeToRockerSwitchAction(final OnOffType value) {

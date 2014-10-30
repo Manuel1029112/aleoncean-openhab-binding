@@ -10,6 +10,7 @@
  */
 package org.openhab.binding.aleoncean.internal.converter.paramctypec;
 
+import org.openhab.binding.aleoncean.internal.ActionIn;
 import org.openhab.binding.aleoncean.internal.converter.NoValueException;
 import org.openhab.binding.aleoncean.internal.converter.ParameterClassTypeClassConverter;
 import org.openhab.binding.aleoncean.internal.devices.ItemInfo;
@@ -17,13 +18,17 @@ import org.openhab.core.events.EventPublisher;
 import org.openhab.core.library.types.OnOffType;
 import org.openhab.core.types.Command;
 import org.openhab.core.types.State;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import eu.aleon.aleoncean.values.RockerSwitchAction;
 
 /**
- *
+ * 
  * @author Markus Rathgeb <maggu2810@gmail.com>
  */
 public abstract class RockerSwitchActionOnOffType extends ParameterClassTypeClassConverter {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(RockerSwitchActionOnOffType.class);
 
     public static final Class<?> PARAMETER_CLASS = RockerSwitchAction.class;
     public static final Class<? extends State> STATE_TYPE_CLASS = OnOffType.class;
@@ -32,6 +37,10 @@ public abstract class RockerSwitchActionOnOffType extends ParameterClassTypeClas
     protected abstract RockerSwitchAction onOffTypeToRockerSwitchAction(final OnOffType value) throws NoValueException;
 
     protected abstract OnOffType rockerSwitchActionToOnOffType(final RockerSwitchAction value) throws NoValueException;
+
+    public RockerSwitchActionOnOffType(final ActionIn actionIn) {
+        super(actionIn);
+    }
 
     @Override
     public void commandFromOpenHAB(final EventPublisher eventPublisher,
@@ -64,7 +73,18 @@ public abstract class RockerSwitchActionOnOffType extends ParameterClassTypeClas
         assert PARAMETER_CLASS.isAssignableFrom(value.getClass());
         try {
             final OnOffType type = rockerSwitchActionToOnOffType((RockerSwitchAction) value);
-            postCommand(eventPublisher, itemName, type);
+            switch (getActionIn()) {
+                case COMMAND:
+                    postCommand(eventPublisher, itemName, type);
+                    break;
+                case STATE:
+                case DEFAULT:
+                    postUpdate(eventPublisher, itemName, type);
+                    break;
+                default:
+                    LOGGER.warn("Don't know how to handle action in type: {}", getActionIn());
+                    break;
+            }
         } catch (final NoValueException ex) {
         }
     }

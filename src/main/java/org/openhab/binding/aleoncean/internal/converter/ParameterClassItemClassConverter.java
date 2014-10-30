@@ -10,10 +10,16 @@
  */
 package org.openhab.binding.aleoncean.internal.converter;
 
+import org.openhab.binding.aleoncean.internal.ActionIn;
+
 /**
  *
  * @author Markus Rathgeb <maggu2810@gmail.com>
  */
 public abstract class ParameterClassItemClassConverter extends StandardConverter {
+
+    public ParameterClassItemClassConverter(final ActionIn actionIn) {
+        super(actionIn);
+    }
 
 }

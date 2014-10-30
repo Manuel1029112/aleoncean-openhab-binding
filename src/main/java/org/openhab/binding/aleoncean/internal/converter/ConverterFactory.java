@@ -16,6 +16,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import org.openhab.binding.aleoncean.internal.ActionIn;
 import org.openhab.binding.aleoncean.internal.converter.paramcitemc.RockerSwitchActionRollerShutterItem;
 import org.openhab.binding.aleoncean.internal.converter.paramctypec.BooleanOnOffType;
 import org.openhab.binding.aleoncean.internal.converter.paramctypec.BooleanUpDownType;
@@ -38,7 +39,7 @@ import eu.aleon.aleoncean.device.DeviceParameter;
 import eu.aleon.aleoncean.device.IllegalDeviceParameterException;
 
 /**
- *
+ * 
  * @author Markus Rathgeb <maggu2810@gmail.com>
  */
 public class ConverterFactory {
@@ -174,14 +175,14 @@ public class ConverterFactory {
 
     /**
      * Get a converter class for the given arguments.
-     *
+     * 
      * We differ between four converters.
      * The converter is chosen in that order:
      * - [paramitemc] parameter to item type (class)
      * - [paramtypec] parameter to one state / command (class)
      * - [paramcitemc] parameter type (class) to item type (class)
      * - [paramctypec] parameter type (class) to one state / command (class)
-     *
+     * 
      * @param parameter
      * @param itemClass
      * @param acceptedDataTypes
@@ -238,10 +239,11 @@ public class ConverterFactory {
         return null;
     }
 
-    public static StandardConverter createFromClass(final Class<? extends StandardConverter> clazz) {
+    public static StandardConverter createFromClass(final Class<? extends StandardConverter> clazz,
+                                                    final ActionIn actionIn) {
         Constructor<? extends StandardConverter> constructor;
         try {
-            constructor = clazz.getConstructor();
+            constructor = clazz.getConstructor(ActionIn.class);
         } catch (final NoSuchMethodException ex) {
             LOGGER.warn("ItemParameterConverter constructor not found.\n{}", ex);
             return null;
@@ -250,9 +252,9 @@ public class ConverterFactory {
             return null;
         }
         try {
-            return constructor.newInstance();
+            return constructor.newInstance(actionIn);
         } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-            LOGGER.warn("Device creation failed.n{}", ex);
+            LOGGER.warn("Device creation failed (class: {}).\n{}", clazz, ex);
             return null;
         }
     }
