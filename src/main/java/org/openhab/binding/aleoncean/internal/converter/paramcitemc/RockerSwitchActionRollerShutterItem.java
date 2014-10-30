@@ -10,7 +10,7 @@
  */
 package org.openhab.binding.aleoncean.internal.converter.paramcitemc;
 
-import eu.aleon.aleoncean.values.RockerSwitchAction;
+import org.openhab.binding.aleoncean.internal.ActionIn;
 import org.openhab.binding.aleoncean.internal.converter.ParameterClassItemClassConverter;
 import org.openhab.binding.aleoncean.internal.devices.ItemInfo;
 import org.openhab.core.events.EventPublisher;
@@ -20,12 +20,17 @@ import org.openhab.core.library.types.StopMoveType;
 import org.openhab.core.library.types.UpDownType;
 import org.openhab.core.types.Command;
 import org.openhab.core.types.State;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import eu.aleon.aleoncean.values.RockerSwitchAction;
 
 /**
- *
+ * 
  * @author Markus Rathgeb <maggu2810@gmail.com>
  */
 public class RockerSwitchActionRollerShutterItem extends ParameterClassItemClassConverter {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(RockerSwitchActionRollerShutterItem.class);
 
     public static final Class<?> PARAMETER_CLASS = RockerSwitchAction.class;
     public static final Class<? extends Item> ITEM_CLASS = RollershutterItem.class;
@@ -36,6 +41,10 @@ public class RockerSwitchActionRollerShutterItem extends ParameterClassItemClass
     private long lastUpReleasedNanoSec = 0;
     private long lastDownPressedNanoSec = 0;
     private long lastDownReleasedNanoSec = 0;
+
+    public RockerSwitchActionRollerShutterItem(final ActionIn actionIn) {
+        super(actionIn);
+    }
 
     @Override
     public void commandFromOpenHAB(final EventPublisher eventPublisher,
@@ -56,6 +65,23 @@ public class RockerSwitchActionRollerShutterItem extends ParameterClassItemClass
         assert PARAMETER_CLASS.isAssignableFrom(value.getClass());
 
         final RockerSwitchAction action = (RockerSwitchAction) value;
+        switch (getActionIn()) {
+            case COMMAND:
+            case DEFAULT:
+                parameterFromDeviceCommand(eventPublisher, itemName, itemInfo, action);
+                break;
+            case STATE:
+                LOGGER.warn("This converter supports no state action.");
+                break;
+            default:
+                LOGGER.warn("Don't know how to handle action in type: {}", getActionIn());
+                break;
+        }
+    }
+
+    private void parameterFromDeviceCommand(final EventPublisher eventPublisher,
+                                            final String itemName, final ItemInfo itemInfo,
+                                            final RockerSwitchAction action) {
         final long curNanoSec = System.nanoTime();
 
         switch (action) {

@@ -10,22 +10,31 @@
  */
 package org.openhab.binding.aleoncean.internal.converter.paramctypec;
 
+import org.openhab.binding.aleoncean.internal.ActionIn;
 import org.openhab.binding.aleoncean.internal.converter.ParameterClassTypeClassConverter;
 import org.openhab.binding.aleoncean.internal.devices.ItemInfo;
 import org.openhab.core.events.EventPublisher;
 import org.openhab.core.library.types.UpDownType;
 import org.openhab.core.types.Command;
 import org.openhab.core.types.State;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- *
+ * 
  * @author Markus Rathgeb <maggu2810@gmail.com>
  */
 public class BooleanUpDownType extends ParameterClassTypeClassConverter {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(BooleanUpDownType.class);
+
     public static final Class<?> PARAMETER_CLASS = Boolean.class;
     public static final Class<? extends State> STATE_TYPE_CLASS = UpDownType.class;
     public static final Class<? extends Command> COMMAND_TYPE_CLASS = UpDownType.class;
+
+    public BooleanUpDownType(final ActionIn actionIn) {
+        super(actionIn);
+    }
 
     private UpDownType booleanToUpDownType(final Boolean i) {
         return i ? UpDownType.UP : UpDownType.DOWN;
@@ -56,7 +65,19 @@ public class BooleanUpDownType extends ParameterClassTypeClassConverter {
                                     final String itemName, final ItemInfo itemInfo,
                                     final Object value) {
         assert PARAMETER_CLASS.isAssignableFrom(value.getClass());
-        postCommand(eventPublisher, itemName, booleanToUpDownType((Boolean) value));
+        final UpDownType type = booleanToUpDownType((Boolean) value);
+        switch (getActionIn()) {
+            case COMMAND:
+                postCommand(eventPublisher, itemName, type);
+                break;
+            case STATE:
+            case DEFAULT:
+                postUpdate(eventPublisher, itemName, type);
+                break;
+            default:
+                LOGGER.warn("Don't know how to handle action in type: {}", getActionIn());
+                break;
+        }
     }
 
 }

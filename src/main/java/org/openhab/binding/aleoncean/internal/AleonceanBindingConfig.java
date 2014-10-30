@@ -10,10 +10,6 @@
  */
 package org.openhab.binding.aleoncean.internal;
 
-import eu.aleon.aleoncean.device.DeviceFactory;
-import eu.aleon.aleoncean.device.DeviceParameter;
-import eu.aleon.aleoncean.device.StandardDevice;
-import eu.aleon.aleoncean.packet.EnOceanId;
 import java.util.List;
 import org.openhab.core.binding.BindingConfig;
 import org.openhab.core.items.Item;
@@ -22,9 +18,13 @@ import org.openhab.core.types.State;
 import org.openhab.model.item.binding.BindingConfigParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import eu.aleon.aleoncean.device.DeviceFactory;
+import eu.aleon.aleoncean.device.DeviceParameter;
+import eu.aleon.aleoncean.device.StandardDevice;
+import eu.aleon.aleoncean.packet.EnOceanId;
 
 /**
- *
+ * 
  * @author Markus Rathgeb <maggu2810@gmail.com>
  */
 public class AleonceanBindingConfig implements BindingConfig {
@@ -33,8 +33,8 @@ public class AleonceanBindingConfig implements BindingConfig {
     private static final String KEY_LOCALID = "LOCALID";
     private static final String KEY_TYPE = "TYPE";
     private static final String KEY_PARAMETER = "PARAMETER";
-    private static final String KEY_CONVERTER = "CONVERTER";
     private static final String KEY_CONVPARAM = "CONVPARAM";
+    private static final String KEY_ACTION_IN = "ACTIONI";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AleonceanBindingConfig.class);
 
@@ -43,6 +43,7 @@ public class AleonceanBindingConfig implements BindingConfig {
     private final Class<? extends StandardDevice> type;
     private final DeviceParameter parameter;
     private final String convParam;
+    private final ActionIn actionIn;
     private Class<? extends Item> itemType;
     private List<Class<? extends State>> acceptedDataTypes;
     private List<Class<? extends Command>> acceptedCommandTypes;
@@ -54,6 +55,7 @@ public class AleonceanBindingConfig implements BindingConfig {
         String valueType = null;
         String valueParameter = null;
         String valueConvParam = null;
+        String valueActionIn = null;
 
         final String[] pairs = config.split(",");
         for (final String pair : pairs) {
@@ -80,6 +82,9 @@ public class AleonceanBindingConfig implements BindingConfig {
                 case KEY_CONVPARAM:
                     valueConvParam = kv[1];
                     break;
+                case KEY_ACTION_IN:
+                    valueActionIn = kv[1];
+                    break;
                 default:
                     final String message = String.format("Unknown parameter '%s'.", kv[0]);
                     LOGGER.warn(message);
@@ -91,7 +96,7 @@ public class AleonceanBindingConfig implements BindingConfig {
         if (valueRemoteId != null) {
             try {
                 this.remoteId.fill(valueRemoteId);
-            } catch (/*NumberFormatException |*/IllegalArgumentException e) {
+            } catch (/* NumberFormatException | */final IllegalArgumentException e) {
                 final String message = String.format("Invalid remote ID: %s", valueRemoteId);
                 LOGGER.warn(message);
                 throw new BindingConfigParseException(message);
@@ -101,7 +106,7 @@ public class AleonceanBindingConfig implements BindingConfig {
         if (valueLocalId != null) {
             try {
                 this.localId.fill(valueLocalId);
-            } catch (/*NumberFormatException |*/IllegalArgumentException e) {
+            } catch (/* NumberFormatException | */final IllegalArgumentException e) {
                 final String message = String.format("Invalid local ID: %s", valueRemoteId);
                 LOGGER.warn(message);
                 throw new BindingConfigParseException(message);
@@ -130,6 +135,17 @@ public class AleonceanBindingConfig implements BindingConfig {
 
         this.convParam = valueConvParam;
 
+        if (valueActionIn != null) {
+            try {
+                actionIn = ActionIn.parse(valueActionIn);
+            } catch (final IllegalArgumentException e) {
+                final String message = String.format("Cannot parse action in parameter: %s", valueActionIn);
+                LOGGER.warn(message);
+                throw new BindingConfigParseException(message);
+            }
+        } else {
+            actionIn = ActionIn.DEFAULT;
+        }
     }
 
     public EnOceanId getRemoteId() {
@@ -152,6 +168,10 @@ public class AleonceanBindingConfig implements BindingConfig {
         return convParam;
     }
 
+    public ActionIn getActionIn() {
+        return actionIn;
+    }
+
     public List<Class<? extends State>> getAcceptedDataTypes() {
         return acceptedDataTypes;
     }
@@ -164,7 +184,7 @@ public class AleonceanBindingConfig implements BindingConfig {
         return acceptedCommandTypes;
     }
 
-    public void setAcceptedCommandTypes(List<Class<? extends Command>> acceptedCommandTypes) {
+    public void setAcceptedCommandTypes(final List<Class<? extends Command>> acceptedCommandTypes) {
         this.acceptedCommandTypes = acceptedCommandTypes;
     }
 
@@ -172,7 +192,7 @@ public class AleonceanBindingConfig implements BindingConfig {
         return itemType;
     }
 
-    public void setItemType(Class<? extends Item> itemType) {
+    public void setItemType(final Class<? extends Item> itemType) {
         this.itemType = itemType;
     }
 

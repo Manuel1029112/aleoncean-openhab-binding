@@ -32,6 +32,23 @@ A converter is used to translate between the item and the device parameter.
 
 E.g. a switch could be used to handle a OnOffType (ON or OFF). A rocker switch action could be "up pressed", "up released", "down pressed" or "down released". Here we can define, if how the on / off should be changed.
 
+### ACTIONI
+
+The action that should be taken if an incoming parameter of a devices changed.
+
+Normally you should not change this setting.
+
+You can use 'c', 's' or 'd' (default value).
+
+* If you choose 'c' an incoming parameter change will be submitted to openHAB as a command (if possible).
+* If you choose 's' an incoming parameter change will be submitted to openHAB as a state (if possible).
+* If you choose 'd' the default logic is applied (mostly state updates).
+
+With this option you change the normal logic, so do it only if you know what you do.
+
+This could for someone be helpful to use direct bindings.
+For example if you would like to use a rocker to switch a light of another binding. The other binding normally wants to get a command. So you do not want to get the current state of the rocker but trigger a command.
+
 ## Examples
 
 ```

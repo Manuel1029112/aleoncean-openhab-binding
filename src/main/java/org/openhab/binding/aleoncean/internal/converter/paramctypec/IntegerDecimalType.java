@@ -10,22 +10,31 @@
  */
 package org.openhab.binding.aleoncean.internal.converter.paramctypec;
 
+import org.openhab.binding.aleoncean.internal.ActionIn;
 import org.openhab.binding.aleoncean.internal.converter.ParameterClassTypeClassConverter;
 import org.openhab.binding.aleoncean.internal.devices.ItemInfo;
 import org.openhab.core.events.EventPublisher;
 import org.openhab.core.library.types.DecimalType;
 import org.openhab.core.types.Command;
 import org.openhab.core.types.State;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- *
+ * 
  * @author Markus Rathgeb <maggu2810@gmail.com>
  */
 public class IntegerDecimalType extends ParameterClassTypeClassConverter {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(IntegerDecimalType.class);
+
     public static final Class<?> PARAMETER_CLASS = Integer.class;
     public static final Class<? extends State> STATE_TYPE_CLASS = DecimalType.class;
     public static final Class<? extends Command> COMMAND_TYPE_CLASS = DecimalType.class;
+
+    public IntegerDecimalType(final ActionIn actionIn) {
+        super(actionIn);
+    }
 
     private DecimalType integerToDecimalType(final Integer i) {
         return new DecimalType(i);
@@ -56,6 +65,18 @@ public class IntegerDecimalType extends ParameterClassTypeClassConverter {
                                     final String itemName, final ItemInfo itemInfo,
                                     final Object value) {
         assert PARAMETER_CLASS.isAssignableFrom(value.getClass());
-        postCommand(eventPublisher, itemName, integerToDecimalType((Integer) value));
+        final DecimalType type = integerToDecimalType((Integer) value);
+        switch (getActionIn()) {
+            case COMMAND:
+                postCommand(eventPublisher, itemName, type);
+                break;
+            case STATE:
+            case DEFAULT:
+                postUpdate(eventPublisher, itemName, type);
+                break;
+            default:
+                LOGGER.warn("Don't know how to handle action in type: {}", getActionIn());
+                break;
+        }
     }
 }
