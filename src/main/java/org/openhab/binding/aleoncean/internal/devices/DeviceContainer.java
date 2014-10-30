@@ -53,7 +53,7 @@ public class DeviceContainer implements DeviceParameterUpdatedListener {
      *
      * @param connector The ESP3 connector that will be used to write to.
      */
-    public DeviceContainer(ESP3Connector connector) {
+    public DeviceContainer(final ESP3Connector connector) {
         this.connector = connector;
     }
 
@@ -85,7 +85,7 @@ public class DeviceContainer implements DeviceParameterUpdatedListener {
      *
      * @param eventPublisher The event publisher that should be used to post updates.
      */
-    public void setEventPublisher(EventPublisher eventPublisher) {
+    public void setEventPublisher(final EventPublisher eventPublisher) {
         this.eventPublisher = eventPublisher;
     }
 
@@ -116,7 +116,7 @@ public class DeviceContainer implements DeviceParameterUpdatedListener {
     }
 
     private void delRemoteAddressToDevice(final Device device) {
-        LinkedList<Device> list = remoteAddressToDevice.get(device.getAddressRemote());
+        final LinkedList<Device> list = remoteAddressToDevice.get(device.getAddressRemote());
         if (list == null) {
         } else {
             list.remove(device);
@@ -185,7 +185,7 @@ public class DeviceContainer implements DeviceParameterUpdatedListener {
                 LOGGER.warn("Cannot create converter from class: {}", converterClass);
                 return false;
             }
-        } catch (IllegalArgumentException ex) {
+        } catch (final IllegalArgumentException ex) {
             LOGGER.warn("Parameter not handled by device.\n{}", ex);
             return false;
         }
@@ -209,7 +209,7 @@ public class DeviceContainer implements DeviceParameterUpdatedListener {
             if (parameterValue != null) {
                 publishParameter(itemName, itemInfo, parameterValue);
             }
-        } catch (IllegalDeviceParameterException ex) {
+        } catch (final IllegalDeviceParameterException ex) {
             LOGGER.warn("Get value for item by parameter failed; name: {}, info: {}, parameter: {}\n{}", itemName, itemInfo, config.getParameter(), ex);
         }
 
