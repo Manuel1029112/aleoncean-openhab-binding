@@ -10,7 +10,7 @@
  */
 package org.openhab.binding.aleoncean.internal.converter.paramctypec;
 
-import eu.aleon.aleoncean.values.RockerSwitchAction;
+import org.openhab.binding.aleoncean.internal.ActionIn;
 import org.openhab.binding.aleoncean.internal.converter.NoValueException;
 import org.openhab.binding.aleoncean.internal.converter.ParameterClassTypeClassConverter;
 import org.openhab.binding.aleoncean.internal.devices.ItemInfo;
@@ -18,12 +18,17 @@ import org.openhab.core.events.EventPublisher;
 import org.openhab.core.library.types.DecimalType;
 import org.openhab.core.types.Command;
 import org.openhab.core.types.State;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import eu.aleon.aleoncean.values.RockerSwitchAction;
 
 /**
- *
+ * 
  * @author Markus Rathgeb <maggu2810@gmail.com>
  */
 public class RockerSwitchActionDecimalType extends ParameterClassTypeClassConverter {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(RockerSwitchActionDecimalType.class);
 
     public static final Class<?> PARAMETER_CLASS = RockerSwitchAction.class;
     public static final Class<? extends State> STATE_TYPE_CLASS = DecimalType.class;
@@ -33,6 +38,10 @@ public class RockerSwitchActionDecimalType extends ParameterClassTypeClassConver
     private static final int DEC_RSA_DIM_UP_RELEASED = 2;
     private static final int DEC_RSA_DIM_DOWN_PRESSED = 3;
     private static final int DEC_RSA_DIM_DOWN_RELEASED = 4;
+
+    public RockerSwitchActionDecimalType(final ActionIn actionIn) {
+        super(actionIn);
+    }
 
     public static DecimalType rockerSwitchActionToDecimalType(final RockerSwitchAction action) throws NoValueException {
         switch (action) {
@@ -72,7 +81,7 @@ public class RockerSwitchActionDecimalType extends ParameterClassTypeClassConver
         try {
             final RockerSwitchAction action = decimalTypeToRockerSwitchAction((DecimalType) command);
             setByParameter(itemInfo.getDevice(), itemInfo.getParameter(), action);
-        } catch (NoValueException ex) {
+        } catch (final NoValueException ex) {
         }
     }
 
@@ -84,7 +93,7 @@ public class RockerSwitchActionDecimalType extends ParameterClassTypeClassConver
         try {
             final RockerSwitchAction action = decimalTypeToRockerSwitchAction((DecimalType) state);
             setByParameter(itemInfo.getDevice(), itemInfo.getParameter(), action);
-        } catch (NoValueException ex) {
+        } catch (final NoValueException ex) {
         }
     }
 
@@ -95,8 +104,19 @@ public class RockerSwitchActionDecimalType extends ParameterClassTypeClassConver
         assert PARAMETER_CLASS.isAssignableFrom(value.getClass());
         try {
             final DecimalType type = rockerSwitchActionToDecimalType((RockerSwitchAction) value);
-            postCommand(eventPublisher, itemName, type);
-        } catch (NoValueException ex) {
+            switch (getActionIn()) {
+                case COMMAND:
+                    postCommand(eventPublisher, itemName, type);
+                    break;
+                case STATE:
+                case DEFAULT:
+                    postUpdate(eventPublisher, itemName, type);
+                    break;
+                default:
+                    LOGGER.warn("Don't know how to handle action in type: {}", getActionIn());
+                    break;
+            }
+        } catch (final NoValueException ex) {
         }
     }
 

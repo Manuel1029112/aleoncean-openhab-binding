@@ -178,7 +178,7 @@ public class DeviceContainer implements DeviceParameterUpdatedListener {
             }
 
             // Create a converter instance of the converter class.
-            converter = ConverterFactory.createFromClass(converterClass);
+            converter = ConverterFactory.createFromClass(converterClass, config.getActionIn());
 
             // Proceed only if a converter is available.
             if (converter == null) {

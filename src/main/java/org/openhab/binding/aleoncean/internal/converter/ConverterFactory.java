@@ -10,14 +10,13 @@
  */
 package org.openhab.binding.aleoncean.internal.converter;
 
-import eu.aleon.aleoncean.device.DeviceParameter;
-import eu.aleon.aleoncean.device.IllegalDeviceParameterException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import org.openhab.binding.aleoncean.internal.ActionIn;
 import org.openhab.binding.aleoncean.internal.converter.paramcitemc.RockerSwitchActionRollerShutterItem;
 import org.openhab.binding.aleoncean.internal.converter.paramctypec.BooleanOnOffType;
 import org.openhab.binding.aleoncean.internal.converter.paramctypec.BooleanUpDownType;
@@ -36,9 +35,11 @@ import org.openhab.core.types.Command;
 import org.openhab.core.types.State;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import eu.aleon.aleoncean.device.DeviceParameter;
+import eu.aleon.aleoncean.device.IllegalDeviceParameterException;
 
 /**
- *
+ * 
  * @author Markus Rathgeb <maggu2810@gmail.com>
  */
 public class ConverterFactory {
@@ -174,14 +175,14 @@ public class ConverterFactory {
 
     /**
      * Get a converter class for the given arguments.
-     *
+     * 
      * We differ between four converters.
      * The converter is chosen in that order:
      * - [paramitemc] parameter to item type (class)
      * - [paramtypec] parameter to one state / command (class)
      * - [paramcitemc] parameter type (class) to item type (class)
      * - [paramctypec] parameter type (class) to one state / command (class)
-     *
+     * 
      * @param parameter
      * @param itemClass
      * @param acceptedDataTypes
@@ -191,19 +192,19 @@ public class ConverterFactory {
      *         returned.
      */
     public static Class<? extends StandardConverter> getConverterClass(final DeviceParameter parameter,
-                                                                       Class<? extends Item> itemClass,
-                                                                       List<Class<? extends State>> acceptedDataTypes,
-                                                                       List<Class<? extends Command>> acceptedCommandTypes,
+                                                                       final Class<? extends Item> itemClass,
+                                                                       final List<Class<? extends State>> acceptedDataTypes,
+                                                                       final List<Class<? extends Command>> acceptedCommandTypes,
                                                                        final String convParam) {
         final Class<?> parameterClass;
         try {
             parameterClass = DeviceParameter.getSupportedClass(parameter);
-        } catch (IllegalDeviceParameterException ex) {
+        } catch (final IllegalDeviceParameterException ex) {
             LOGGER.warn("Illegal device parameter '{}'\n{}", parameter, ex);
             return null;
         }
 
-        for (Class<? extends ParameterItemClassConverter> converterClass : PARAMITEMC) {
+        for (final Class<? extends ParameterItemClassConverter> converterClass : PARAMITEMC) {
             if (checkParameter(converterClass, parameter)
                 && checkItemClass(converterClass, itemClass)
                 && checkConvParam(converterClass, convParam)) {
@@ -211,7 +212,7 @@ public class ConverterFactory {
             }
         }
 
-        for (Class<? extends ParameterTypeClassConverter> converterClass : PARAMTYPEC) {
+        for (final Class<? extends ParameterTypeClassConverter> converterClass : PARAMTYPEC) {
             if (checkParameter(converterClass, parameter)
                 && checkTypeClass(converterClass, acceptedDataTypes, acceptedCommandTypes)
                 && checkConvParam(converterClass, convParam)) {
@@ -219,7 +220,7 @@ public class ConverterFactory {
             }
         }
 
-        for (Class<? extends ParameterClassItemClassConverter> converterClass : PARAMCITEMC) {
+        for (final Class<? extends ParameterClassItemClassConverter> converterClass : PARAMCITEMC) {
             if (checkParameterClass(converterClass, parameterClass)
                 && checkItemClass(converterClass, itemClass)
                 && checkConvParam(converterClass, convParam)) {
@@ -227,7 +228,7 @@ public class ConverterFactory {
             }
         }
 
-        for (Class<? extends ParameterClassTypeClassConverter> converterClass : PARAMCTYPEC) {
+        for (final Class<? extends ParameterClassTypeClassConverter> converterClass : PARAMCTYPEC) {
             if (checkParameterClass(converterClass, parameterClass)
                 && checkTypeClass(converterClass, acceptedDataTypes, acceptedCommandTypes)
                 && checkConvParam(converterClass, convParam)) {
@@ -238,21 +239,22 @@ public class ConverterFactory {
         return null;
     }
 
-    public static StandardConverter createFromClass(Class<? extends StandardConverter> clazz) {
+    public static StandardConverter createFromClass(final Class<? extends StandardConverter> clazz,
+                                                    final ActionIn actionIn) {
         Constructor<? extends StandardConverter> constructor;
         try {
-            constructor = clazz.getConstructor();
-        } catch (NoSuchMethodException ex) {
+            constructor = clazz.getConstructor(ActionIn.class);
+        } catch (final NoSuchMethodException ex) {
             LOGGER.warn("ItemParameterConverter constructor not found.\n{}", ex);
             return null;
-        } catch (SecurityException ex) {
+        } catch (final SecurityException ex) {
             LOGGER.warn("Search for ItemParameterConverter constructor throws security exception.\n{}", ex);
             return null;
         }
         try {
-            return constructor.newInstance();
+            return constructor.newInstance(actionIn);
         } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-            LOGGER.warn("Device creation failed.n{}", ex);
+            LOGGER.warn("Device creation failed (class: {}).\n{}", clazz, ex);
             return null;
         }
     }
