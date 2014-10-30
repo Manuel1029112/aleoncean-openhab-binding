@@ -21,7 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 
+ *
  * @author Markus Rathgeb <maggu2810@gmail.com>
  */
 public class BooleanOnOffType extends ParameterClassTypeClassConverter {

@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 import eu.aleon.aleoncean.values.RockerSwitchAction;
 
 /**
- * 
+ *
  * @author Markus Rathgeb <maggu2810@gmail.com>
  */
 public class RockerSwitchActionRollerShutterItem extends ParameterClassItemClassConverter {
@@ -50,12 +50,16 @@ public class RockerSwitchActionRollerShutterItem extends ParameterClassItemClass
     public void commandFromOpenHAB(final EventPublisher eventPublisher,
                                    final String itemName, final ItemInfo itemInfo,
                                    final Command command) {
+        // We map incoming rocker switch actions to control a roller shutter item.
+        // Incoming commands and states are ignored.
     }
 
     @Override
     public void stateFromOpenHAB(final EventPublisher eventPublisher,
                                  final String itemName, final ItemInfo itemInfo,
                                  final State state) {
+        // We map incoming rocker switch actions to control a roller shutter item.
+        // Incoming commands and states are ignored.
     }
 
     @Override

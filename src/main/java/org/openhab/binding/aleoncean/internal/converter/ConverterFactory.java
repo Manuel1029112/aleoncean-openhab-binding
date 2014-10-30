@@ -39,7 +39,7 @@ import eu.aleon.aleoncean.device.DeviceParameter;
 import eu.aleon.aleoncean.device.IllegalDeviceParameterException;
 
 /**
- * 
+ *
  * @author Markus Rathgeb <maggu2810@gmail.com>
  */
 public class ConverterFactory {
@@ -175,14 +175,14 @@ public class ConverterFactory {
 
     /**
      * Get a converter class for the given arguments.
-     * 
+     *
      * We differ between four converters.
      * The converter is chosen in that order:
      * - [paramitemc] parameter to item type (class)
      * - [paramtypec] parameter to one state / command (class)
      * - [paramcitemc] parameter type (class) to item type (class)
      * - [paramctypec] parameter type (class) to one state / command (class)
-     * 
+     *
      * @param parameter
      * @param itemClass
      * @param acceptedDataTypes

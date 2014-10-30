@@ -34,7 +34,7 @@ public final class AleonceanActivator implements BundleActivator {
      * @throws java.lang.Exception
      */
     @Override
-    public void start(BundleContext bc) throws Exception {
+    public void start(final BundleContext bc) throws Exception {
         context = bc;
         LOGGER.debug("aleoncean binding has been started.");
     }
@@ -46,7 +46,7 @@ public final class AleonceanActivator implements BundleActivator {
      * @throws java.lang.Exception
      */
     @Override
-    public void stop(BundleContext bc) throws Exception {
+    public void stop(final BundleContext bc) throws Exception {
         context = null;
         LOGGER.debug("aleoncean binding has been stopped.");
     }

@@ -10,17 +10,9 @@
  */
 package org.openhab.binding.aleoncean.internal.devices;
 
-import eu.aleon.aleoncean.device.Device;
-import eu.aleon.aleoncean.device.DeviceFactory;
-import eu.aleon.aleoncean.device.DeviceParameterUpdatedEvent;
-import eu.aleon.aleoncean.device.DeviceParameterUpdatedListener;
-import eu.aleon.aleoncean.device.IllegalDeviceParameterException;
-import eu.aleon.aleoncean.device.StandardDevice;
-import eu.aleon.aleoncean.packet.EnOceanId;
-import eu.aleon.aleoncean.packet.RadioPacket;
-import eu.aleon.aleoncean.rxtx.ESP3Connector;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.SortedMap;
 import java.util.TreeMap;
 import org.openhab.binding.aleoncean.internal.AleonceanBindingConfig;
 import org.openhab.binding.aleoncean.internal.converter.ConverterFactory;
@@ -30,6 +22,15 @@ import org.openhab.core.types.Command;
 import org.openhab.core.types.State;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import eu.aleon.aleoncean.device.Device;
+import eu.aleon.aleoncean.device.DeviceFactory;
+import eu.aleon.aleoncean.device.DeviceParameterUpdatedEvent;
+import eu.aleon.aleoncean.device.DeviceParameterUpdatedListener;
+import eu.aleon.aleoncean.device.IllegalDeviceParameterException;
+import eu.aleon.aleoncean.device.StandardDevice;
+import eu.aleon.aleoncean.packet.EnOceanId;
+import eu.aleon.aleoncean.packet.RadioPacket;
+import eu.aleon.aleoncean.rxtx.ESP3Connector;
 
 /**
  *
@@ -39,10 +40,10 @@ public class DeviceContainer implements DeviceParameterUpdatedListener {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DeviceContainer.class);
 
-    private final TreeMap<Integer, Device> devices = new TreeMap<>();
-    private final TreeMap<String, ItemInfo> itemNameInfos = new TreeMap<>();
-    private final TreeMap<Device, List<String>> deviceToItemNames = new TreeMap<>();
-    private final TreeMap<EnOceanId, LinkedList<Device>> remoteAddressToDevice = new TreeMap<>();
+    private final SortedMap<Integer, Device> devices = new TreeMap<>();
+    private final SortedMap<String, ItemInfo> itemNameInfos = new TreeMap<>();
+    private final SortedMap<Device, List<String>> deviceToItemNames = new TreeMap<>();
+    private final SortedMap<EnOceanId, List<Device>> remoteAddressToDevice = new TreeMap<>();
 
     private final ESP3Connector connector;
 
@@ -53,7 +54,7 @@ public class DeviceContainer implements DeviceParameterUpdatedListener {
      *
      * @param connector The ESP3 connector that will be used to write to.
      */
-    public DeviceContainer(ESP3Connector connector) {
+    public DeviceContainer(final ESP3Connector connector) {
         this.connector = connector;
     }
 
@@ -63,6 +64,9 @@ public class DeviceContainer implements DeviceParameterUpdatedListener {
      * This function must be called, before any handling is done.
      */
     public void start() {
+        // ATM there is nothing to do on start.
+        // Cleanup is done in the stop function.
+        // The caller have to set the event publisher and add items.
     }
 
     /**
@@ -85,7 +89,7 @@ public class DeviceContainer implements DeviceParameterUpdatedListener {
      *
      * @param eventPublisher The event publisher that should be used to post updates.
      */
-    public void setEventPublisher(EventPublisher eventPublisher) {
+    public void setEventPublisher(final EventPublisher eventPublisher) {
         this.eventPublisher = eventPublisher;
     }
 
@@ -103,7 +107,7 @@ public class DeviceContainer implements DeviceParameterUpdatedListener {
     }
 
     private void addRemoteAddressToDevice(final Device device) {
-        LinkedList<Device> list = remoteAddressToDevice.get(device.getAddressRemote());
+        List<Device> list = remoteAddressToDevice.get(device.getAddressRemote());
         if (list == null) {
             list = new LinkedList<>();
             list.add(device);
@@ -116,7 +120,7 @@ public class DeviceContainer implements DeviceParameterUpdatedListener {
     }
 
     private void delRemoteAddressToDevice(final Device device) {
-        LinkedList<Device> list = remoteAddressToDevice.get(device.getAddressRemote());
+        final List<Device> list = remoteAddressToDevice.get(device.getAddressRemote());
         if (list == null) {
         } else {
             list.remove(device);
@@ -185,7 +189,7 @@ public class DeviceContainer implements DeviceParameterUpdatedListener {
                 LOGGER.warn("Cannot create converter from class: {}", converterClass);
                 return false;
             }
-        } catch (IllegalArgumentException ex) {
+        } catch (final IllegalArgumentException ex) {
             LOGGER.warn("Parameter not handled by device.\n{}", ex);
             return false;
         }
@@ -209,7 +213,7 @@ public class DeviceContainer implements DeviceParameterUpdatedListener {
             if (parameterValue != null) {
                 publishParameter(itemName, itemInfo, parameterValue);
             }
-        } catch (IllegalDeviceParameterException ex) {
+        } catch (final IllegalDeviceParameterException ex) {
             LOGGER.warn("Get value for item by parameter failed; name: {}, info: {}, parameter: {}\n{}", itemName, itemInfo, config.getParameter(), ex);
         }
 
@@ -252,7 +256,7 @@ public class DeviceContainer implements DeviceParameterUpdatedListener {
     }
 
     public void handleIncomingRadioPacket(final RadioPacket packet) {
-        final LinkedList<Device> deviceList = remoteAddressToDevice.get(packet.getSenderId());
+        final List<Device> deviceList = remoteAddressToDevice.get(packet.getSenderId());
         if (deviceList == null) {
             return;
         }

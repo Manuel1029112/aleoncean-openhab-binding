@@ -20,7 +20,7 @@ import eu.aleon.aleoncean.device.DeviceParameter;
 import eu.aleon.aleoncean.device.IllegalDeviceParameterException;
 
 /**
- * 
+ *
  * @author Markus Rathgeb <maggu2810@gmail.com>
  */
 public abstract class StandardConverter {

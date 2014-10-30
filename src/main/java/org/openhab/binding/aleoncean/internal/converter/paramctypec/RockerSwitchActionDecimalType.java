@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
 import eu.aleon.aleoncean.values.RockerSwitchAction;
 
 /**
- * 
+ *
  * @author Markus Rathgeb <maggu2810@gmail.com>
  */
 public class RockerSwitchActionDecimalType extends ParameterClassTypeClassConverter {

@@ -10,12 +10,12 @@
  */
 package org.openhab.binding.aleoncean.internal.worker;
 
-import eu.aleon.aleoncean.packet.ESP3Packet;
-import eu.aleon.aleoncean.rxtx.ESP3Connector;
-import eu.aleon.aleoncean.rxtx.ReaderShutdownException;
 import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import eu.aleon.aleoncean.packet.ESP3Packet;
+import eu.aleon.aleoncean.rxtx.ESP3Connector;
+import eu.aleon.aleoncean.rxtx.ReaderShutdownException;
 
 /**
  *
@@ -40,7 +40,7 @@ public class ESP3Reader implements Runnable {
 
             try {
                 packet = connector.read(1000, TimeUnit.DAYS);
-            } catch (ReaderShutdownException ex) {
+            } catch (final ReaderShutdownException ex) {
                 // Received indication that the read end was shut down.
                 return;
             }

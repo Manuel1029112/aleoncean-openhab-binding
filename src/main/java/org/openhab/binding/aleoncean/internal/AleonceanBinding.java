@@ -10,7 +10,6 @@
  */
 package org.openhab.binding.aleoncean.internal;
 
-import eu.aleon.aleoncean.packet.EnOceanId;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.concurrent.TimeUnit;
@@ -34,6 +33,7 @@ import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import eu.aleon.aleoncean.packet.EnOceanId;
 
 /**
  * Implement this class if you are going create an actively polling service like
@@ -86,7 +86,7 @@ public class AleonceanBinding extends AbstractBinding<AleonceanBindingProvider> 
     }
 
     @Override
-    protected void internalReceiveCommand(String itemName, Command command) {
+    protected void internalReceiveCommand(final String itemName, final Command command) {
         // the code being executed when a command was sent on the openHAB
         // event bus goes here. This method is only called if one of the
         // BindingProviders provide a binding for the given 'itemName'.
@@ -99,7 +99,7 @@ public class AleonceanBinding extends AbstractBinding<AleonceanBindingProvider> 
     }
 
     @Override
-    protected void internalReceiveUpdate(String itemName, State newState) {
+    protected void internalReceiveUpdate(final String itemName, final State newState) {
         // the code being executed when a state was sent on the openHAB
         // event bus goes here. This method is only called if one of the
         // BindingProviders provide a binding for the given 'itemName'.
@@ -112,12 +112,12 @@ public class AleonceanBinding extends AbstractBinding<AleonceanBindingProvider> 
     }
 
     @Override
-    public void updated(Dictionary<String, ?> config) throws ConfigurationException {
+    public void updated(final Dictionary<String, ?> config) throws ConfigurationException {
         if (config != null) {
-            Enumeration<String> keys = config.keys();
+            final Enumeration<String> keys = config.keys();
             while (keys.hasMoreElements()) {
-                String key = keys.nextElement();
-                Object val = config.get(key);
+                final String key = keys.nextElement();
+                final Object val = config.get(key);
                 LOGGER.debug("Parse config: {}; {}", key, val);
             }
 
@@ -144,13 +144,13 @@ public class AleonceanBinding extends AbstractBinding<AleonceanBindingProvider> 
             final String valueBaseId = (String) config.get(CONFIG_BASEID);
             if (StringUtils.isNotBlank(valueBaseId)) {
                 try {
-                    EnOceanId baseId = new EnOceanId(valueBaseId);
+                    final EnOceanId baseId = new EnOceanId(valueBaseId);
                     reply = worker.addAndWaitForReply(new WorkerItemSetBaseId(baseId), 1, TimeUnit.MINUTES);
                     if (reply.getReplyCode() != WorkerReplyCode.OK) {
                         LOGGER.warn("Something went wrong ({}) set base id.", reply.getReplyCode());
                         return;
                     }
-                } catch (IllegalArgumentException ex) {
+                } catch (final IllegalArgumentException ex) {
                     LOGGER.warn("Something went wrong parsing the base id.", ex);
                     return;
                 }
@@ -166,21 +166,21 @@ public class AleonceanBinding extends AbstractBinding<AleonceanBindingProvider> 
     }
 
     @Override
-    public void addBindingProvider(AleonceanBindingProvider provider) {
+    public void addBindingProvider(final AleonceanBindingProvider provider) {
         LOGGER.debug("addBindingProvider({})", provider);
         super.addBindingProvider(provider);
         LOGGER.debug("addBindingProvider(...) done");
     }
 
     @Override
-    public void removeBindingProvider(AleonceanBindingProvider provider) {
+    public void removeBindingProvider(final AleonceanBindingProvider provider) {
         LOGGER.debug("removeBindingProvider({})", provider);
         super.removeBindingProvider(provider);
         LOGGER.debug("removeBindingProvider(...) done");
     }
 
     @Override
-    public void bindingChanged(BindingProvider provider, String itemName) {
+    public void bindingChanged(final BindingProvider provider, final String itemName) {
 
         /*
          * The binding of an item was changed / removed / added.
@@ -203,14 +203,14 @@ public class AleonceanBinding extends AbstractBinding<AleonceanBindingProvider> 
     }
 
     @Override
-    public void allBindingsChanged(BindingProvider provider) {
+    public void allBindingsChanged(final BindingProvider provider) {
         LOGGER.debug("allBindingsChanged({})", provider);
         super.allBindingsChanged(provider);
         LOGGER.debug("allBindingsChanged(...) done");
     }
 
     @Override
-    public void setEventPublisher(EventPublisher eventPublisher) {
+    public void setEventPublisher(final EventPublisher eventPublisher) {
         super.setEventPublisher(eventPublisher);
 
         final WorkerReply reply = worker.addAndWaitForReply(new WorkerItemSetEventPublisher(eventPublisher, true), 1, TimeUnit.MINUTES);
@@ -220,7 +220,7 @@ public class AleonceanBinding extends AbstractBinding<AleonceanBindingProvider> 
     }
 
     @Override
-    public void unsetEventPublisher(EventPublisher eventPublisher) {
+    public void unsetEventPublisher(final EventPublisher eventPublisher) {
         super.unsetEventPublisher(eventPublisher);
 
         final WorkerReply reply = worker.addAndWaitForReply(new WorkerItemSetEventPublisher(eventPublisher, false), 1, TimeUnit.MINUTES);
