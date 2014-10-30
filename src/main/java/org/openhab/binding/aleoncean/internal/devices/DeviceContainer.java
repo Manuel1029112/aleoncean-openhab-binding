@@ -10,15 +10,6 @@
  */
 package org.openhab.binding.aleoncean.internal.devices;
 
-import eu.aleon.aleoncean.device.Device;
-import eu.aleon.aleoncean.device.DeviceFactory;
-import eu.aleon.aleoncean.device.DeviceParameterUpdatedEvent;
-import eu.aleon.aleoncean.device.DeviceParameterUpdatedListener;
-import eu.aleon.aleoncean.device.IllegalDeviceParameterException;
-import eu.aleon.aleoncean.device.StandardDevice;
-import eu.aleon.aleoncean.packet.EnOceanId;
-import eu.aleon.aleoncean.packet.RadioPacket;
-import eu.aleon.aleoncean.rxtx.ESP3Connector;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeMap;
@@ -30,6 +21,15 @@ import org.openhab.core.types.Command;
 import org.openhab.core.types.State;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import eu.aleon.aleoncean.device.Device;
+import eu.aleon.aleoncean.device.DeviceFactory;
+import eu.aleon.aleoncean.device.DeviceParameterUpdatedEvent;
+import eu.aleon.aleoncean.device.DeviceParameterUpdatedListener;
+import eu.aleon.aleoncean.device.IllegalDeviceParameterException;
+import eu.aleon.aleoncean.device.StandardDevice;
+import eu.aleon.aleoncean.packet.EnOceanId;
+import eu.aleon.aleoncean.packet.RadioPacket;
+import eu.aleon.aleoncean.rxtx.ESP3Connector;
 
 /**
  *
