@@ -64,6 +64,9 @@ public class DeviceContainer implements DeviceParameterUpdatedListener {
      * This function must be called, before any handling is done.
      */
     public void start() {
+        // ATM there is nothing to do on start.
+        // Cleanup is done in the stop function.
+        // The caller have to set the event publisher and add items.
     }
 
     /**

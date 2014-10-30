@@ -10,7 +10,6 @@
  */
 package org.openhab.binding.aleoncean.internal.converter.paramcitemc;
 
-import eu.aleon.aleoncean.values.RockerSwitchAction;
 import org.openhab.binding.aleoncean.internal.converter.ParameterClassItemClassConverter;
 import org.openhab.binding.aleoncean.internal.devices.ItemInfo;
 import org.openhab.core.events.EventPublisher;
@@ -20,6 +19,7 @@ import org.openhab.core.library.types.StopMoveType;
 import org.openhab.core.library.types.UpDownType;
 import org.openhab.core.types.Command;
 import org.openhab.core.types.State;
+import eu.aleon.aleoncean.values.RockerSwitchAction;
 
 /**
  *
@@ -41,12 +41,16 @@ public class RockerSwitchActionRollerShutterItem extends ParameterClassItemClass
     public void commandFromOpenHAB(final EventPublisher eventPublisher,
                                    final String itemName, final ItemInfo itemInfo,
                                    final Command command) {
+        // We map incoming rocker switch actions to control a roller shutter item.
+        // Incoming commands and states are ignored.
     }
 
     @Override
     public void stateFromOpenHAB(final EventPublisher eventPublisher,
                                  final String itemName, final ItemInfo itemInfo,
                                  final State state) {
+        // We map incoming rocker switch actions to control a roller shutter item.
+        // Incoming commands and states are ignored.
     }
 
     @Override
