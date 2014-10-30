@@ -275,7 +275,7 @@ public class Worker implements Runnable {
                 final CoRdIdBaseResponseOk response = (CoRdIdBaseResponseOk) responseGeneric;
                 baseId.fill(response.getBaseId());
                 LOGGER.info("Base ID: {}, remaining write cycles: {}", response.getBaseId(),
-                             response.getRemainingWriteCycles());
+                            response.getRemainingWriteCycles());
             }
         } catch (final UnknownResponseException ex) {
             LOGGER.warn("Unknown response recived.", ex);
