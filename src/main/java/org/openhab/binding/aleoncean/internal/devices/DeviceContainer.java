@@ -12,6 +12,7 @@ package org.openhab.binding.aleoncean.internal.devices;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.SortedMap;
 import java.util.TreeMap;
 import org.openhab.binding.aleoncean.internal.AleonceanBindingConfig;
 import org.openhab.binding.aleoncean.internal.converter.ConverterFactory;
@@ -39,10 +40,10 @@ public class DeviceContainer implements DeviceParameterUpdatedListener {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DeviceContainer.class);
 
-    private final TreeMap<Integer, Device> devices = new TreeMap<>();
-    private final TreeMap<String, ItemInfo> itemNameInfos = new TreeMap<>();
-    private final TreeMap<Device, List<String>> deviceToItemNames = new TreeMap<>();
-    private final TreeMap<EnOceanId, LinkedList<Device>> remoteAddressToDevice = new TreeMap<>();
+    private final SortedMap<Integer, Device> devices = new TreeMap<>();
+    private final SortedMap<String, ItemInfo> itemNameInfos = new TreeMap<>();
+    private final SortedMap<Device, List<String>> deviceToItemNames = new TreeMap<>();
+    private final SortedMap<EnOceanId, List<Device>> remoteAddressToDevice = new TreeMap<>();
 
     private final ESP3Connector connector;
 
@@ -103,7 +104,7 @@ public class DeviceContainer implements DeviceParameterUpdatedListener {
     }
 
     private void addRemoteAddressToDevice(final Device device) {
-        LinkedList<Device> list = remoteAddressToDevice.get(device.getAddressRemote());
+        List<Device> list = remoteAddressToDevice.get(device.getAddressRemote());
         if (list == null) {
             list = new LinkedList<>();
             list.add(device);
@@ -116,7 +117,7 @@ public class DeviceContainer implements DeviceParameterUpdatedListener {
     }
 
     private void delRemoteAddressToDevice(final Device device) {
-        final LinkedList<Device> list = remoteAddressToDevice.get(device.getAddressRemote());
+        final List<Device> list = remoteAddressToDevice.get(device.getAddressRemote());
         if (list == null) {
         } else {
             list.remove(device);
@@ -252,7 +253,7 @@ public class DeviceContainer implements DeviceParameterUpdatedListener {
     }
 
     public void handleIncomingRadioPacket(final RadioPacket packet) {
-        final LinkedList<Device> deviceList = remoteAddressToDevice.get(packet.getSenderId());
+        final List<Device> deviceList = remoteAddressToDevice.get(packet.getSenderId());
         if (deviceList == null) {
             return;
         }
