@@ -10,7 +10,6 @@
  */
 package org.openhab.binding.aleoncean.internal.converter.paramctypec;
 
-import eu.aleon.aleoncean.values.RockerSwitchAction;
 import org.openhab.binding.aleoncean.internal.converter.NoValueException;
 import org.openhab.binding.aleoncean.internal.converter.ParameterClassTypeClassConverter;
 import org.openhab.binding.aleoncean.internal.devices.ItemInfo;
@@ -18,6 +17,7 @@ import org.openhab.core.events.EventPublisher;
 import org.openhab.core.library.types.DecimalType;
 import org.openhab.core.types.Command;
 import org.openhab.core.types.State;
+import eu.aleon.aleoncean.values.RockerSwitchAction;
 
 /**
  *

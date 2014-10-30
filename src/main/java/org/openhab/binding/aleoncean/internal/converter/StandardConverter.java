@@ -10,13 +10,13 @@
  */
 package org.openhab.binding.aleoncean.internal.converter;
 
-import eu.aleon.aleoncean.device.Device;
-import eu.aleon.aleoncean.device.DeviceParameter;
-import eu.aleon.aleoncean.device.IllegalDeviceParameterException;
 import org.openhab.binding.aleoncean.internal.devices.ItemInfo;
 import org.openhab.core.events.EventPublisher;
 import org.openhab.core.types.Command;
 import org.openhab.core.types.State;
+import eu.aleon.aleoncean.device.Device;
+import eu.aleon.aleoncean.device.DeviceParameter;
+import eu.aleon.aleoncean.device.IllegalDeviceParameterException;
 
 /**
  *

@@ -10,7 +10,6 @@
  */
 package org.openhab.binding.aleoncean.internal;
 
-import eu.aleon.aleoncean.packet.EnOceanId;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.concurrent.TimeUnit;
@@ -34,6 +33,7 @@ import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import eu.aleon.aleoncean.packet.EnOceanId;
 
 /**
  * Implement this class if you are going create an actively polling service like

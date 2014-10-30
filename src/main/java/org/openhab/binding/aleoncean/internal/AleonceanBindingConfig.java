@@ -10,10 +10,6 @@
  */
 package org.openhab.binding.aleoncean.internal;
 
-import eu.aleon.aleoncean.device.DeviceFactory;
-import eu.aleon.aleoncean.device.DeviceParameter;
-import eu.aleon.aleoncean.device.StandardDevice;
-import eu.aleon.aleoncean.packet.EnOceanId;
 import java.util.List;
 import org.openhab.core.binding.BindingConfig;
 import org.openhab.core.items.Item;
@@ -22,6 +18,10 @@ import org.openhab.core.types.State;
 import org.openhab.model.item.binding.BindingConfigParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import eu.aleon.aleoncean.device.DeviceFactory;
+import eu.aleon.aleoncean.device.DeviceParameter;
+import eu.aleon.aleoncean.device.StandardDevice;
+import eu.aleon.aleoncean.packet.EnOceanId;
 
 /**
  *

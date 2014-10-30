@@ -10,9 +10,9 @@
  */
 package org.openhab.binding.aleoncean.internal.converter.paramctypec;
 
-import eu.aleon.aleoncean.values.RockerSwitchAction;
 import org.openhab.binding.aleoncean.internal.converter.NoValueException;
 import org.openhab.core.library.types.OnOffType;
+import eu.aleon.aleoncean.values.RockerSwitchAction;
 
 /**
  *

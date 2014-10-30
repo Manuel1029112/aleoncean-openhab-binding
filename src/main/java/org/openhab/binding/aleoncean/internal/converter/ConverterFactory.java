@@ -10,8 +10,6 @@
  */
 package org.openhab.binding.aleoncean.internal.converter;
 
-import eu.aleon.aleoncean.device.DeviceParameter;
-import eu.aleon.aleoncean.device.IllegalDeviceParameterException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -36,6 +34,8 @@ import org.openhab.core.types.Command;
 import org.openhab.core.types.State;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import eu.aleon.aleoncean.device.DeviceParameter;
+import eu.aleon.aleoncean.device.IllegalDeviceParameterException;
 
 /**
  *

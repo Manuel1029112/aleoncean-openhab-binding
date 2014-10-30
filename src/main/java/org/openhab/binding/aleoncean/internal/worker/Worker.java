@@ -10,6 +10,10 @@
  */
 package org.openhab.binding.aleoncean.internal.worker;
 
+import java.util.concurrent.TimeUnit;
+import org.openhab.binding.aleoncean.internal.devices.DeviceContainer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import eu.aleon.aleoncean.packet.ESP3Packet;
 import eu.aleon.aleoncean.packet.EnOceanId;
 import eu.aleon.aleoncean.packet.RadioPacket;
@@ -25,10 +29,6 @@ import eu.aleon.aleoncean.packet.response.commoncommand.CoRdVersionResponseOk;
 import eu.aleon.aleoncean.rxtx.ESP3Connector;
 import eu.aleon.aleoncean.rxtx.USB300;
 import eu.aleon.aleoncean.util.ThreadUtil;
-import java.util.concurrent.TimeUnit;
-import org.openhab.binding.aleoncean.internal.devices.DeviceContainer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *

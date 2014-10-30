@@ -10,14 +10,14 @@
  */
 package org.openhab.binding.aleoncean.internal.devices;
 
-import eu.aleon.aleoncean.device.Device;
-import eu.aleon.aleoncean.device.DeviceParameter;
 import java.util.List;
 import org.openhab.binding.aleoncean.internal.AleonceanBindingConfig;
 import org.openhab.binding.aleoncean.internal.converter.StandardConverter;
 import org.openhab.core.items.Item;
 import org.openhab.core.types.Command;
 import org.openhab.core.types.State;
+import eu.aleon.aleoncean.device.Device;
+import eu.aleon.aleoncean.device.DeviceParameter;
 
 /**
  *
