@@ -206,6 +206,7 @@ public class AleonceanBinding extends AbstractBinding<AleonceanBindingProvider> 
     public void allBindingsChanged(final BindingProvider provider) {
         LOGGER.debug("allBindingsChanged({})", provider);
         super.allBindingsChanged(provider);
+        notifyWorkerAllBindingsChanged((AleonceanGenericBindingProvider) provider);
         LOGGER.debug("allBindingsChanged(...) done");
     }
 
