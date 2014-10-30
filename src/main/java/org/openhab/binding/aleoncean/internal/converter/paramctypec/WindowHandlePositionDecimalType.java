@@ -66,7 +66,7 @@ public class WindowHandlePositionDecimalType extends ParameterClassTypeClassConv
         assert COMMAND_TYPE_CLASS.isAssignableFrom(command.getClass());
         try {
             setByParameter(itemInfo.getDevice(), itemInfo.getParameter(), decimalTypeToWindowHandlePosition((DecimalType) command));
-        } catch (NoValueException ex) {
+        } catch (final NoValueException ex) {
         }
     }
 
@@ -77,7 +77,7 @@ public class WindowHandlePositionDecimalType extends ParameterClassTypeClassConv
         assert STATE_TYPE_CLASS.isAssignableFrom(state.getClass());
         try {
             setByParameter(itemInfo.getDevice(), itemInfo.getParameter(), decimalTypeToWindowHandlePosition((DecimalType) state));
-        } catch (NoValueException ex) {
+        } catch (final NoValueException ex) {
         }
     }
 
@@ -88,7 +88,7 @@ public class WindowHandlePositionDecimalType extends ParameterClassTypeClassConv
         assert PARAMETER_CLASS.isAssignableFrom(value.getClass());
         try {
             postCommand(eventPublisher, itemName, windowHandlePositionToDecimalType((WindowHandlePosition) value));
-        } catch (NoValueException ex) {
+        } catch (final NoValueException ex) {
         }
     }
 

@@ -59,7 +59,7 @@ public class RockerSwitchActionUpDownType extends ParameterClassTypeClassConvert
         try {
             final RockerSwitchAction action = upDownTypeToRockerSwitchAction((UpDownType) command);
             setByParameter(itemInfo.getDevice(), itemInfo.getParameter(), action);
-        } catch (NoValueException ex) {
+        } catch (final NoValueException ex) {
         }
     }
 
@@ -71,7 +71,7 @@ public class RockerSwitchActionUpDownType extends ParameterClassTypeClassConvert
         try {
             final RockerSwitchAction action = upDownTypeToRockerSwitchAction((UpDownType) state);
             setByParameter(itemInfo.getDevice(), itemInfo.getParameter(), action);
-        } catch (NoValueException ex) {
+        } catch (final NoValueException ex) {
         }
     }
 
@@ -83,7 +83,7 @@ public class RockerSwitchActionUpDownType extends ParameterClassTypeClassConvert
         try {
             final UpDownType type = rockerSwitchActionToUpDownType((RockerSwitchAction) value);
             postCommand(eventPublisher, itemName, type);
-        } catch (NoValueException ex) {
+        } catch (final NoValueException ex) {
         }
     }
 }

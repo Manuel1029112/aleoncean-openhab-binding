@@ -83,7 +83,7 @@ public class Worker implements Runnable {
     }
 
     public void stop() {
-        WorkerReply reply = addAndWaitForReply(new WorkerItemShutdown(), 10, TimeUnit.SECONDS);
+        final WorkerReply reply = addAndWaitForReply(new WorkerItemShutdown(), 10, TimeUnit.SECONDS);
         LOGGER.debug("{}", reply);
 
         ThreadUtil.join(workerThread);
@@ -93,7 +93,7 @@ public class Worker implements Runnable {
         workerQueue.add(workerItem);
     }
 
-    public WorkerReply addAndWaitForReply(final WorkerItem workerItem, long timeout, TimeUnit unit) {
+    public WorkerReply addAndWaitForReply(final WorkerItem workerItem, final long timeout, final TimeUnit unit) {
         if (running) {
             workerQueue.add(workerItem);
             return workerItem.waitForReply(timeout, unit);
@@ -130,7 +130,7 @@ public class Worker implements Runnable {
                     handleWorkerItem(workerItem);
                 }
 
-            } catch (InterruptedException ex) {
+            } catch (final InterruptedException ex) {
                 // There is nothing to do, but writing a log message.
                 LOGGER.debug("Received an exception while taking element from worker queue.", ex);
             }
@@ -242,8 +242,8 @@ public class Worker implements Runnable {
     }
 
     private void reqCoRdVersion() {
-        CoRdVersionPacket packet = new CoRdVersionPacket();
-        ResponsePacket responsePacket = connector.write(packet);
+        final CoRdVersionPacket packet = new CoRdVersionPacket();
+        final ResponsePacket responsePacket = connector.write(packet);
         if (responsePacket == null) {
             LOGGER.warn("Timeout on request versions (chip ID).");
             return;
@@ -256,14 +256,14 @@ public class Worker implements Runnable {
                 chipId.fill(response.getChipId());
                 LOGGER.info("Chip ID: {}", response.getChipId());
             }
-        } catch (UnknownResponseException ex) {
+        } catch (final UnknownResponseException ex) {
             LOGGER.warn("Unknown response recived.", ex);
         }
     }
 
     private void reqCoRdIdBase() {
-        CoRdIdBase packet = new CoRdIdBase();
-        ResponsePacket responsePacket = connector.write(packet);
+        final CoRdIdBase packet = new CoRdIdBase();
+        final ResponsePacket responsePacket = connector.write(packet);
         if (responsePacket == null) {
             LOGGER.warn("Timeout on request base ID.");
             return;
@@ -277,17 +277,17 @@ public class Worker implements Runnable {
                 LOGGER.info("Base ID: {}, remaining write cycles: {}", response.getBaseId(),
                              response.getRemainingWriteCycles());
             }
-        } catch (UnknownResponseException ex) {
+        } catch (final UnknownResponseException ex) {
             LOGGER.warn("Unknown response recived.", ex);
         }
     }
 
     private void reqCoWrIdBase(final EnOceanId baseId) {
-        CoWrIdBase packet = new CoWrIdBase();
+        final CoWrIdBase packet = new CoWrIdBase();
         packet.setBaseId(baseId);
 
         LOGGER.debug("Try to change base ID to: {}", baseId);
-        ResponsePacket responsePacket = connector.write(packet);
+        final ResponsePacket responsePacket = connector.write(packet);
         if (responsePacket == null) {
             LOGGER.warn("Timeout on set base ID request.");
             return;
@@ -301,7 +301,7 @@ public class Worker implements Runnable {
             } else {
                 LOGGER.warn("Something went wrong on base ID writing {}.", responsePacket.getReturnCode());
             }
-        } catch (UnknownResponseException ex) {
+        } catch (final UnknownResponseException ex) {
             LOGGER.warn("Unknown response recived.", ex);
         }
     }

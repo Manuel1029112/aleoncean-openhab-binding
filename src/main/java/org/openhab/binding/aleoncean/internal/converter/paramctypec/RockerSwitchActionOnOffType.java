@@ -41,7 +41,7 @@ public abstract class RockerSwitchActionOnOffType extends ParameterClassTypeClas
         try {
             final RockerSwitchAction action = onOffTypeToRockerSwitchAction((OnOffType) command);
             setByParameter(itemInfo.getDevice(), itemInfo.getParameter(), action);
-        } catch (NoValueException ex) {
+        } catch (final NoValueException ex) {
         }
     }
 
@@ -53,7 +53,7 @@ public abstract class RockerSwitchActionOnOffType extends ParameterClassTypeClas
         try {
             final RockerSwitchAction action = onOffTypeToRockerSwitchAction((OnOffType) state);
             setByParameter(itemInfo.getDevice(), itemInfo.getParameter(), action);
-        } catch (NoValueException ex) {
+        } catch (final NoValueException ex) {
         }
     }
 
@@ -65,7 +65,7 @@ public abstract class RockerSwitchActionOnOffType extends ParameterClassTypeClas
         try {
             final OnOffType type = rockerSwitchActionToOnOffType((RockerSwitchAction) value);
             postCommand(eventPublisher, itemName, type);
-        } catch (NoValueException ex) {
+        } catch (final NoValueException ex) {
         }
     }
 

@@ -52,7 +52,7 @@ public abstract class StandardConverter {
 
         try {
             device.setByParameter(parameter, value);
-        } catch (IllegalDeviceParameterException ex) {
+        } catch (final IllegalDeviceParameterException ex) {
             sendToDevice = false;
         }
     }

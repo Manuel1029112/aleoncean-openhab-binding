@@ -91,7 +91,7 @@ public class AleonceanBindingConfig implements BindingConfig {
         if (valueRemoteId != null) {
             try {
                 this.remoteId.fill(valueRemoteId);
-            } catch (/*NumberFormatException |*/IllegalArgumentException e) {
+            } catch (/*NumberFormatException |*/final IllegalArgumentException e) {
                 final String message = String.format("Invalid remote ID: %s", valueRemoteId);
                 LOGGER.warn(message);
                 throw new BindingConfigParseException(message);
@@ -101,7 +101,7 @@ public class AleonceanBindingConfig implements BindingConfig {
         if (valueLocalId != null) {
             try {
                 this.localId.fill(valueLocalId);
-            } catch (/*NumberFormatException |*/IllegalArgumentException e) {
+            } catch (/*NumberFormatException |*/final IllegalArgumentException e) {
                 final String message = String.format("Invalid local ID: %s", valueRemoteId);
                 LOGGER.warn(message);
                 throw new BindingConfigParseException(message);
@@ -164,7 +164,7 @@ public class AleonceanBindingConfig implements BindingConfig {
         return acceptedCommandTypes;
     }
 
-    public void setAcceptedCommandTypes(List<Class<? extends Command>> acceptedCommandTypes) {
+    public void setAcceptedCommandTypes(final List<Class<? extends Command>> acceptedCommandTypes) {
         this.acceptedCommandTypes = acceptedCommandTypes;
     }
 
@@ -172,7 +172,7 @@ public class AleonceanBindingConfig implements BindingConfig {
         return itemType;
     }
 
-    public void setItemType(Class<? extends Item> itemType) {
+    public void setItemType(final Class<? extends Item> itemType) {
         this.itemType = itemType;
     }
 

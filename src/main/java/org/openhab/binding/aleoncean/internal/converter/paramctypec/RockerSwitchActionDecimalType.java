@@ -72,7 +72,7 @@ public class RockerSwitchActionDecimalType extends ParameterClassTypeClassConver
         try {
             final RockerSwitchAction action = decimalTypeToRockerSwitchAction((DecimalType) command);
             setByParameter(itemInfo.getDevice(), itemInfo.getParameter(), action);
-        } catch (NoValueException ex) {
+        } catch (final NoValueException ex) {
         }
     }
 
@@ -84,7 +84,7 @@ public class RockerSwitchActionDecimalType extends ParameterClassTypeClassConver
         try {
             final RockerSwitchAction action = decimalTypeToRockerSwitchAction((DecimalType) state);
             setByParameter(itemInfo.getDevice(), itemInfo.getParameter(), action);
-        } catch (NoValueException ex) {
+        } catch (final NoValueException ex) {
         }
     }
 
@@ -96,7 +96,7 @@ public class RockerSwitchActionDecimalType extends ParameterClassTypeClassConver
         try {
             final DecimalType type = rockerSwitchActionToDecimalType((RockerSwitchAction) value);
             postCommand(eventPublisher, itemName, type);
-        } catch (NoValueException ex) {
+        } catch (final NoValueException ex) {
         }
     }
 

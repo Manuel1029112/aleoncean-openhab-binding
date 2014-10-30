@@ -18,7 +18,7 @@ public class WorkerReply {
 
     private final WorkerReplyCode replyCode;
 
-    WorkerReply(WorkerReplyCode replyCode) {
+    WorkerReply(final WorkerReplyCode replyCode) {
         this.replyCode = replyCode;
     }
 

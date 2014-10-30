@@ -22,7 +22,7 @@ public class WorkerItemSetEventPublisher extends WorkerItem {
 
     private final boolean set;
 
-    public WorkerItemSetEventPublisher(final EventPublisher eventPublisher, boolean set) {
+    public WorkerItemSetEventPublisher(final EventPublisher eventPublisher, final boolean set) {
         this.eventPublisher = eventPublisher;
         this.set = set;
     }

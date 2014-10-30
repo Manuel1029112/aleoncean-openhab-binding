@@ -191,19 +191,19 @@ public class ConverterFactory {
      *         returned.
      */
     public static Class<? extends StandardConverter> getConverterClass(final DeviceParameter parameter,
-                                                                       Class<? extends Item> itemClass,
-                                                                       List<Class<? extends State>> acceptedDataTypes,
-                                                                       List<Class<? extends Command>> acceptedCommandTypes,
+                                                                       final Class<? extends Item> itemClass,
+                                                                       final List<Class<? extends State>> acceptedDataTypes,
+                                                                       final List<Class<? extends Command>> acceptedCommandTypes,
                                                                        final String convParam) {
         final Class<?> parameterClass;
         try {
             parameterClass = DeviceParameter.getSupportedClass(parameter);
-        } catch (IllegalDeviceParameterException ex) {
+        } catch (final IllegalDeviceParameterException ex) {
             LOGGER.warn("Illegal device parameter '{}'\n{}", parameter, ex);
             return null;
         }
 
-        for (Class<? extends ParameterItemClassConverter> converterClass : PARAMITEMC) {
+        for (final Class<? extends ParameterItemClassConverter> converterClass : PARAMITEMC) {
             if (checkParameter(converterClass, parameter)
                 && checkItemClass(converterClass, itemClass)
                 && checkConvParam(converterClass, convParam)) {
@@ -211,7 +211,7 @@ public class ConverterFactory {
             }
         }
 
-        for (Class<? extends ParameterTypeClassConverter> converterClass : PARAMTYPEC) {
+        for (final Class<? extends ParameterTypeClassConverter> converterClass : PARAMTYPEC) {
             if (checkParameter(converterClass, parameter)
                 && checkTypeClass(converterClass, acceptedDataTypes, acceptedCommandTypes)
                 && checkConvParam(converterClass, convParam)) {
@@ -219,7 +219,7 @@ public class ConverterFactory {
             }
         }
 
-        for (Class<? extends ParameterClassItemClassConverter> converterClass : PARAMCITEMC) {
+        for (final Class<? extends ParameterClassItemClassConverter> converterClass : PARAMCITEMC) {
             if (checkParameterClass(converterClass, parameterClass)
                 && checkItemClass(converterClass, itemClass)
                 && checkConvParam(converterClass, convParam)) {
@@ -227,7 +227,7 @@ public class ConverterFactory {
             }
         }
 
-        for (Class<? extends ParameterClassTypeClassConverter> converterClass : PARAMCTYPEC) {
+        for (final Class<? extends ParameterClassTypeClassConverter> converterClass : PARAMCTYPEC) {
             if (checkParameterClass(converterClass, parameterClass)
                 && checkTypeClass(converterClass, acceptedDataTypes, acceptedCommandTypes)
                 && checkConvParam(converterClass, convParam)) {
@@ -238,14 +238,14 @@ public class ConverterFactory {
         return null;
     }
 
-    public static StandardConverter createFromClass(Class<? extends StandardConverter> clazz) {
+    public static StandardConverter createFromClass(final Class<? extends StandardConverter> clazz) {
         Constructor<? extends StandardConverter> constructor;
         try {
             constructor = clazz.getConstructor();
-        } catch (NoSuchMethodException ex) {
+        } catch (final NoSuchMethodException ex) {
             LOGGER.warn("ItemParameterConverter constructor not found.\n{}", ex);
             return null;
-        } catch (SecurityException ex) {
+        } catch (final SecurityException ex) {
             LOGGER.warn("Search for ItemParameterConverter constructor throws security exception.\n{}", ex);
             return null;
         }

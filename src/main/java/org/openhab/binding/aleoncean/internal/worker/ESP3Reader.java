@@ -40,7 +40,7 @@ public class ESP3Reader implements Runnable {
 
             try {
                 packet = connector.read(1000, TimeUnit.DAYS);
-            } catch (ReaderShutdownException ex) {
+            } catch (final ReaderShutdownException ex) {
                 // Received indication that the read end was shut down.
                 return;
             }

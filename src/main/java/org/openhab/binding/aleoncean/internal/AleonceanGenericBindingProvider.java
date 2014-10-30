@@ -38,7 +38,7 @@ public class AleonceanGenericBindingProvider extends AbstractGenericBindingProvi
     }
 
     @Override
-    public void validateItemType(Item item, String bindingConfig) throws BindingConfigParseException {
+    public void validateItemType(final Item item, final String bindingConfig) throws BindingConfigParseException {
         LOGGER.debug("validateItemType({},{})", item, bindingConfig);
         //if (!(item instanceof SwitchItem || item instanceof DimmerItem)) {
         //    throw new BindingConfigParseException("item '" + item.getName()
@@ -48,12 +48,12 @@ public class AleonceanGenericBindingProvider extends AbstractGenericBindingProvi
     }
 
     @Override
-    public void processBindingConfiguration(String context, Item item, String bindingConfig) throws BindingConfigParseException {
+    public void processBindingConfiguration(final String context, final Item item, final String bindingConfig) throws BindingConfigParseException {
         super.processBindingConfiguration(context, item, bindingConfig);
 
         LOGGER.debug("processBindingConfiguration({},{},{})", context, item, bindingConfig);
 
-        AleonceanBindingConfig config = new AleonceanBindingConfig(bindingConfig);
+        final AleonceanBindingConfig config = new AleonceanBindingConfig(bindingConfig);
         if (item instanceof GroupItem) {
             config.setItemType(((GroupItem) item).getBaseItem().getClass());
         } else {
