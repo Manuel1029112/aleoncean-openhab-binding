@@ -61,7 +61,7 @@ public class AleonceanBinding extends AbstractBinding<AleonceanBindingProvider> 
             final AleonceanBindingConfig config = provider.getBindingConfig(itemName);
 
             final WorkerReply reply = worker.addAndWaitForReply(new WorkerItemBindingChanged(itemName, config), 1, TimeUnit.MINUTES);
-            if (reply.getReplyCode() != WorkerReplyCode.OK) {
+            if (reply.getReplyCode() != WorkerReplyCode.OK && reply.getReplyCode() != WorkerReplyCode.NOT_RUNNING) {
                 LOGGER.warn("Something went wrong ({}) on binding changed notification (item: {})", reply.getReplyCode(), itemName);
             }
         }
