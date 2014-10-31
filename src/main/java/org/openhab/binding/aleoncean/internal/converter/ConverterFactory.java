@@ -254,7 +254,7 @@ public class ConverterFactory {
         try {
             return constructor.newInstance(actionIn);
         } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-            LOGGER.warn("Device creation failed (class: {}).\n{}", clazz, ex);
+            LOGGER.warn("Converter creation failed (class: {}).\n{}", clazz, ex);
             return null;
         }
     }
