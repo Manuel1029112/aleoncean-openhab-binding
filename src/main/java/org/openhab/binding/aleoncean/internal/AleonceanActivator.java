@@ -25,7 +25,7 @@ public final class AleonceanActivator implements BundleActivator {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AleonceanActivator.class);
 
-    private static BundleContext context;
+    private BundleContext context;
 
     /**
      * Called whenever the OSGi framework starts our bundle
@@ -56,7 +56,7 @@ public final class AleonceanActivator implements BundleActivator {
      *
      * @return the bundle context
      */
-    public static BundleContext getContext() {
+    public BundleContext getContext() {
         return context;
     }
 
