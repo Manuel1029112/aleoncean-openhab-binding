@@ -32,13 +32,16 @@ public class WorkerItem {
     private final BlockingQueue<WorkerReply> replyQueue = new LinkedBlockingQueue<>(1);
 
     public WorkerReply waitForReply(final long timeout, final TimeUnit unit) {
+        WorkerReply reply;
+
         try {
-            return replyQueue.poll(timeout, unit);
+            reply = replyQueue.poll(timeout, unit);
         } catch (final InterruptedException ex) {
             LOGGER.warn("Exception while reply poll.", ex);
+            reply = null;
         }
 
-        return new WorkerReply(WorkerReplyCode.TIMEOUT);
+        return reply != null ? reply : new WorkerReply(WorkerReplyCode.TIMEOUT);
     }
 
     public void reply(final WorkerReply reply) {
