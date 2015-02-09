@@ -28,4 +28,4 @@ Bundle-DocURL: http://www.openhab.org
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Service-Component: OSGI-INF/binding.xml, OSGI-INF/genericbindingprovider.xml
 Bundle-ClassPath: .,
- lib/aleoncean-1.0.jar
+ lib/aleoncean-1.1.jar
