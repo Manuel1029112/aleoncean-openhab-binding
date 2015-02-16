@@ -56,7 +56,7 @@ public class Worker implements Runnable {
 
     private final DeviceContainer devices;
 
-    boolean running;
+    private volatile boolean running;
 
     public Worker() {
         this.workerQueue = new WorkerQueue();
@@ -79,26 +79,36 @@ public class Worker implements Runnable {
      *
      * @return Return true if the worker could be started. If something went wrong false is returned.
      */
-    public boolean start() {
+    public synchronized boolean start() {
+        LOGGER.debug("worker: start");
+
         running = true;
         devices.start();
         workerThread.start();
 
+        LOGGER.debug("worker: started");
         return true;
     }
 
-    public void stop() {
+    public synchronized void stop() {
+        LOGGER.debug("worker: stop");
+
         final WorkerReply reply = addAndWaitForReply(new WorkerItemShutdown(), 10, TimeUnit.SECONDS);
         LOGGER.debug("{}", reply);
 
         ThreadUtil.join(workerThread);
+        LOGGER.debug("worker: stopped");
     }
 
-    public void add(final WorkerItem workerItem) {
-        workerQueue.add(workerItem);
+    public synchronized void add(final WorkerItem workerItem) {
+        if (running) {
+            workerQueue.add(workerItem);
+        } else {
+            LOGGER.warn("Will not add worker item ({}) because worker not running.", workerItem);
+        }
     }
 
-    public WorkerReply addAndWaitForReply(final WorkerItem workerItem, final long timeout, final TimeUnit unit) {
+    public synchronized WorkerReply addAndWaitForReply(final WorkerItem workerItem, final long timeout, final TimeUnit unit) {
         if (running) {
             workerQueue.add(workerItem);
             return workerItem.waitForReply(timeout, unit);
@@ -113,6 +123,7 @@ public class Worker implements Runnable {
             try {
                 // Take the next item from the worker queue.
                 final WorkerItem workerItem = workerQueue.take();
+                LOGGER.trace("Received a worker item: {}", workerItem);
 
                 // Inspect received item.
                 if (workerItem instanceof WorkerItemShutdown) {
