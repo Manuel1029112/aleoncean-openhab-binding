@@ -16,6 +16,7 @@
 package org.openhab.binding.aleoncean.internal;
 
 import java.util.List;
+
 import org.openhab.core.binding.BindingConfig;
 import org.openhab.core.items.Item;
 import org.openhab.core.types.Command;
@@ -23,9 +24,10 @@ import org.openhab.core.types.State;
 import org.openhab.model.item.binding.BindingConfigParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import eu.aleon.aleoncean.device.DeviceFactory;
+
 import eu.aleon.aleoncean.device.DeviceParameter;
 import eu.aleon.aleoncean.device.StandardDevice;
+import eu.aleon.aleoncean.device.SupportedDevice;
 import eu.aleon.aleoncean.packet.EnOceanId;
 
 /**
@@ -119,7 +121,7 @@ public class AleonceanBindingConfig implements BindingConfig {
         }
 
         if (valueType != null) {
-            this.type = DeviceFactory.getClassForType(valueType);
+            this.type = SupportedDevice.getClassForIdent(valueType);
             if (this.type == null) {
                 final String message = String.format("Unknown type (%s).", valueType);
                 LOGGER.warn(message);

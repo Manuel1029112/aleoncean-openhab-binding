@@ -23,6 +23,13 @@
 * MOTION (r)
 * OCCUPANCY_BUTTON (r)
 
+## A5-12-01
+
+### Parameter
+
+* ENERGY_WS (r)
+* POWER_W (r)
+
 ## A5-20-01
 
 ### Parameter
@@ -103,7 +110,7 @@ __Pre-requirement__: [teach-in](#remote device, send data)
 
 To communicate with that remote device the local EnOcean device must be teached-in to the remote device.
 
-You have to clear the old communication partner on the remote device and teach-in the openHAB system (see manual of the remote device, how to teach-in new devices).
+You have to clear the old communication partner on the remote device and teach-in your system (see manual of the remote device, how to teach-in new devices).
 
 The most remote devices will be reply a teach-in request if a remote device sends a teach-in request.
 
