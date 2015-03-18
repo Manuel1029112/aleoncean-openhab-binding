@@ -62,10 +62,12 @@ public class Worker implements Runnable {
         this.workerQueue = new WorkerQueue();
         this.connector = new USB300();
 
-        this.workerThread = new Thread(null, this, String.format("%s: %s", this.getClass().getCanonicalName(), "worker thread"));
+        this.workerThread = new Thread(null, this, String.format("%s: %s", this.getClass().getCanonicalName(),
+                "worker thread"));
 
         this.reader = new ESP3Reader(connector, workerQueue);
-        this.readerThread = new Thread(null, reader, String.format("%s: %s", this.getClass().getCanonicalName(), "reader thread"));
+        this.readerThread = new Thread(null, reader, String.format("%s: %s", this.getClass().getCanonicalName(),
+                "reader thread"));
 
         this.devices = new DeviceContainer(connector);
     }
@@ -108,7 +110,8 @@ public class Worker implements Runnable {
         }
     }
 
-    public synchronized WorkerReply addAndWaitForReply(final WorkerItem workerItem, final long timeout, final TimeUnit unit) {
+    public synchronized WorkerReply addAndWaitForReply(final WorkerItem workerItem, final long timeout,
+            final TimeUnit unit) {
         if (running) {
             workerQueue.add(workerItem);
             return workerItem.waitForReply(timeout, unit);
@@ -173,9 +176,11 @@ public class Worker implements Runnable {
         LOGGER.debug("Received ESP3 port: {}", workerItem.getESP3Port());
 
         stopESP3();
-        startESP3(workerItem.getESP3Port());
-
-        workerItem.reply(new WorkerReply(WorkerReplyCode.OK));
+        if (startESP3(workerItem.getESP3Port())) {
+            workerItem.reply(new WorkerReply(WorkerReplyCode.OK));
+        } else {
+            workerItem.reply(new WorkerReply(WorkerReplyCode.FAILED));
+        }
     }
 
     private void handleWorkerItemSetBaseId(final WorkerItemSetBaseId workerItem) {
@@ -235,8 +240,12 @@ public class Worker implements Runnable {
         workerItem.reply(new WorkerReply(WorkerReplyCode.OK));
     }
 
-    private void startESP3(final String device) {
-        connector.connect(device);
+    private boolean startESP3(final String device) {
+        if (!connector.connect(device)) {
+            LOGGER.warn("Cannot connect to device '{}'", device);
+            return false;
+        }
+
         readerThread.start();
 
         // Fetch the chip ID.
@@ -245,6 +254,7 @@ public class Worker implements Runnable {
         // Fetch the base ID.
         reqCoRdIdBase();
 
+        return true;
     }
 
     private void stopESP3() {
@@ -291,7 +301,7 @@ public class Worker implements Runnable {
                 final CoRdIdBaseResponseOk response = (CoRdIdBaseResponseOk) responseGeneric;
                 baseId.fill(response.getBaseId());
                 LOGGER.info("Base ID: {}, remaining write cycles: {}", response.getBaseId(),
-                            response.getRemainingWriteCycles());
+                        response.getRemainingWriteCycles());
             }
         } catch (final UnknownResponseException ex) {
             LOGGER.warn("Unknown response recived.", ex);

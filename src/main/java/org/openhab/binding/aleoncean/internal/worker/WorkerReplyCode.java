@@ -21,5 +21,8 @@ package org.openhab.binding.aleoncean.internal.worker;
  */
 public enum WorkerReplyCode {
 
-    NOT_RUNNING, TIMEOUT, OK
+    NOT_RUNNING,
+    TIMEOUT,
+    OK,
+    FAILED // generic failure
 }
