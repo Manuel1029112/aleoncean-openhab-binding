@@ -21,7 +21,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-
 import org.openhab.binding.aleoncean.internal.ActionIn;
 import org.openhab.binding.aleoncean.internal.converter.paramcitemc.RockerSwitchActionRollerShutterItem;
 import org.openhab.binding.aleoncean.internal.converter.paramctypec.BooleanOnOffType;
@@ -41,7 +40,6 @@ import org.openhab.core.types.Command;
 import org.openhab.core.types.State;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import eu.aleon.aleoncean.device.DeviceParameter;
 import eu.aleon.aleoncean.device.IllegalDeviceParameterException;
 
@@ -112,67 +110,56 @@ public class ConverterFactory {
         PARAMCTYPEC = Collections.unmodifiableList(list);
     }
 
-    private static Object getConverterStaticField(final Class<? extends StandardConverter> converterClass,
-                                                  final String fieldName) {
-        try {
-            final Field field = converterClass.getField(FIELD_STATE_TYPE_CLASS);
-            return field.get(null);
-        } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
-            return null;
-        }
-    }
-
-    private static DeviceParameter getConverterParameter(final Class<? extends StandardConverter> conv) {
-        return (DeviceParameter) getConverterStaticField(conv, FIELD_PARAMETER);
-    }
-
-    private static Class<?> getConverterParameterClass(final Class<? extends StandardConverter> conv) {
-        return (Class<?>) getConverterStaticField(conv, FIELD_PARAMETER_CLASS);
-    }
-
-    @SuppressWarnings("unchecked")
-    private static Class<? extends Item> getConverterItem(final Class<? extends StandardConverter> conv) {
-        return (Class<? extends Item>) getConverterStaticField(conv, FIELD_ITEM_CLASS);
-    }
-
-    @SuppressWarnings("unchecked")
-    private static Class<? extends State> getConverterStateType(final Class<? extends StandardConverter> conv) {
-        return (Class<? extends State>) getConverterStaticField(conv, FIELD_STATE_TYPE_CLASS);
-    }
-
-    @SuppressWarnings("unchecked")
-    private static Class<? extends Command> getConverterCommandType(final Class<? extends StandardConverter> conv) {
-        return (Class<? extends Command>) getConverterStaticField(conv, FIELD_COMMAND_TYPE_CLASS);
-    }
-
-    private static String getConverterConverterParameter(final Class<? extends StandardConverter> conv) {
-        return (String) getConverterStaticField(conv, FIELD_CONV_PARAM);
-    }
-
     private static boolean checkParameter(final Class<? extends StandardConverter> converterClass,
                                           final DeviceParameter parameter) {
-        final DeviceParameter converterParameter = getConverterParameter(converterClass);
-        return converterParameter.equals(parameter);
+        try {
+            final Field fieldParameter = converterClass.getField(FIELD_PARAMETER);
+            final DeviceParameter converterParameter = (DeviceParameter) fieldParameter.get(null);
+
+            return converterParameter.equals(parameter);
+        } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException ex) {
+            return false;
+        }
     }
 
     private static boolean checkParameterClass(final Class<? extends StandardConverter> converterClass,
                                                final Class<?> parameterClass) {
-        final Class<?> converterParameterClass = getConverterParameterClass(converterClass);
-        return converterParameterClass.equals(parameterClass);
+        try {
+            final Field fieldParameterClass = converterClass.getField(FIELD_PARAMETER_CLASS);
+            final Class<?> converterParameterClass = (Class<?>) fieldParameterClass.get(null);
+
+            return converterParameterClass.equals(parameterClass);
+        } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException ex) {
+            return false;
+        }
     }
 
     private static boolean checkItemClass(final Class<? extends StandardConverter> converterClass,
                                           final Class<? extends Item> itemClass) {
-        final Class<? extends Item> converterItemClass = getConverterItem(converterClass);
-        return converterItemClass.equals(itemClass);
+        try {
+            final Field fieldItemClass = converterClass.getField(FIELD_ITEM_CLASS);
+            final Class<? extends Item> converterItemClass = (Class<? extends Item>) fieldItemClass.get(null);
+
+            return converterItemClass.equals(itemClass);
+        } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException ex) {
+            return false;
+        }
     }
 
     private static boolean checkTypeClass(final Class<? extends StandardConverter> converterClass,
                                           final List<Class<? extends State>> acceptedDataTypes,
                                           final List<Class<? extends Command>> acceptedCommandTypes) {
-        final Class<? extends State> stateTypeClass = getConverterStateType(converterClass);
-        final Class<? extends Command> commandTypeClass = getConverterCommandType(converterClass);
-        return acceptedDataTypes.contains(stateTypeClass) && acceptedCommandTypes.contains(commandTypeClass);
+        try {
+            final Field fieldStateType = converterClass.getField(FIELD_STATE_TYPE_CLASS);
+            final Field fieldCommandType = converterClass.getField(FIELD_COMMAND_TYPE_CLASS);
+
+            final Class<? extends State> converterStateTypeClass = (Class<? extends State>) fieldStateType.get(null);
+            final Class<? extends Command> converterCommandTypeClass = (Class<? extends Command>) fieldCommandType.get(null);
+
+            return acceptedDataTypes.contains(converterStateTypeClass) && acceptedCommandTypes.contains(converterCommandTypeClass);
+        } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException ex) {
+            return false;
+        }
     }
 
     private static boolean checkConvParam(final Class<? extends StandardConverter> converterClass,
@@ -181,8 +168,14 @@ public class ConverterFactory {
             return true;
         }
 
-        final String converterConvParam = getConverterConverterParameter(converterClass);
-        return converterConvParam.equals(convParam);
+        try {
+            final Field fieldConvParam = converterClass.getField(FIELD_CONV_PARAM);
+            final String converterConvParam = (String) fieldConvParam.get(null);
+
+            return converterConvParam.equals(convParam);
+        } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException ex) {
+            return false;
+        }
     }
 
     /**
@@ -217,31 +210,33 @@ public class ConverterFactory {
         }
 
         for (final Class<? extends ParameterItemClassConverter> converterClass : PARAMITEMC) {
-            if (checkParameter(converterClass, parameter) && checkItemClass(converterClass, itemClass)
-                    && checkConvParam(converterClass, convParam)) {
+            if (checkParameter(converterClass, parameter)
+                && checkItemClass(converterClass, itemClass)
+                && checkConvParam(converterClass, convParam)) {
                 return converterClass;
             }
         }
 
         for (final Class<? extends ParameterTypeClassConverter> converterClass : PARAMTYPEC) {
             if (checkParameter(converterClass, parameter)
-                    && checkTypeClass(converterClass, acceptedDataTypes, acceptedCommandTypes)
-                    && checkConvParam(converterClass, convParam)) {
+                && checkTypeClass(converterClass, acceptedDataTypes, acceptedCommandTypes)
+                && checkConvParam(converterClass, convParam)) {
                 return converterClass;
             }
         }
 
         for (final Class<? extends ParameterClassItemClassConverter> converterClass : PARAMCITEMC) {
-            if (checkParameterClass(converterClass, parameterClass) && checkItemClass(converterClass, itemClass)
-                    && checkConvParam(converterClass, convParam)) {
+            if (checkParameterClass(converterClass, parameterClass)
+                && checkItemClass(converterClass, itemClass)
+                && checkConvParam(converterClass, convParam)) {
                 return converterClass;
             }
         }
 
         for (final Class<? extends ParameterClassTypeClassConverter> converterClass : PARAMCTYPEC) {
             if (checkParameterClass(converterClass, parameterClass)
-                    && checkTypeClass(converterClass, acceptedDataTypes, acceptedCommandTypes)
-                    && checkConvParam(converterClass, convParam)) {
+                && checkTypeClass(converterClass, acceptedDataTypes, acceptedCommandTypes)
+                && checkConvParam(converterClass, convParam)) {
                 return converterClass;
             }
         }
